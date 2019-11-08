@@ -17,11 +17,15 @@ def init_logging():
     return log
 
 
+def get_port():
+    return 10002
+
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Run name node of the distributed file system")
-    parser.add_argument("-n", "--nodeType", type=int, default=1, help="Type of the node: 1 = name node, 2 = file node, 3 = client app")
+    parser.add_argument("-n", "--nodeType", default="nameNode", help="Type of the node/app: nameNode, fileNode, client")
     parser.add_argument("-i", "--ipAddress", default="127.0.0.1", help="Name node ip address")
-    parser.add_argument("-p", "--port", type=int, default=10001, help="Name node port number")
+    parser.add_argument("-p", "--port", default=None, type=int, help="Name node port number")
     args = parser.parse_args()
     return args.nodeType, args.ipAddress, args.port
 
@@ -37,9 +41,9 @@ if __name__ == '__main__':
     log = init_logging()
     node_type, ip_address, port = parse_args()
 
-    if node_type == 1:
+    if node_type == "nameNode":
         log.info('Starting the Name Node')
-        run(ip_address, port, NameNode)
-    elif node_type == 2:
+        run(ip_address, (port or 10001), NameNode)
+    elif node_type == "fileNode":
         log.info('Starting a File Node')
-        run(ip_address, port, FileNode)
+        run(ip_address, (port or get_port()), FileNode)
