@@ -37,18 +37,15 @@ Execute the program:
 
     $ python3 dfs.py -n fileNode -port 10002
     
+The file node will start listening to http requests at address '127.0.0.1', port 10002. If the port number is omitted the system will assign the file server a port number in the range (10002, 10010).
+
 #### Sending a request
 
-After name node has been started it can be queried using for example a web browser. To query the name node type:
+After name node has been started it can be queried using for example a web browser. To query the name node type browse to:
 
-    $ http://localhost:10001/
-    
-in your browser.
+    $ http://localhost:10002/
     
 #### Stopping
-
-You may stop program execution at any time by typing Ctrl+C.
-The file node will start listening to '127.0.0.1' at port 10002. 
 
 You may stop program execution at any time by typing Ctrl+C.
 
