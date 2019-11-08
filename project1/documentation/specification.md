@@ -6,7 +6,8 @@
 
 ### Client
 
-Role: Client software. Provides access to the distributed file system. 
+* Client software
+* Provides access to the distributed file system. 
 
 #### Communication
 
@@ -17,12 +18,22 @@ Role: Client software. Provides access to the distributed file system.
 
 ##### Client -> File Node
 
-* Put file, response: ok (SYNC)
-* Get file, response: the file (SYNC)
+* PUT file, response: ok (SYNC)
+* GET file, response: the file (SYNC)
 
 ### Name Node
 
-Role: Master node. Always running/listening. The client's and a (novel) file server's first point of contact. Maintains a list of files and file nodes.
+* Master node
+* Single point of failure
+* Always running/listening
+* The client's and a (novel) file server's first point of contact
+    * Informs the client which file server to use for PUT and GET
+    * Adds the (novel) file node as part of the system (i.e. in the node list)
+* Maintains a list of files
+    * The file nodes inform the name node of their files when there are changes
+* Maintains a list of file nodes
+    * File nodes register themselves on the name node when they are started
+    * File nodes send heartbeats to the name node
 
 ##### Name Node -> Client
 
@@ -34,7 +45,10 @@ None
 
 ### File Node
 
-Role: Worker node. Registers itself to the Name Node when it's started. There can be many. Handles storing the actual files. 
+* Worker node
+* There can be many
+* Registers itself on the name node when it's started
+* Handles storing the actual files
 
 ##### File Node -> Client
 
@@ -42,8 +56,8 @@ None
 
 ##### File Node -> Name Node
 
-* Register
-* Send file list
-* Send heartbeat
+* Register 
+* Send file list 
+* Send heartbeat 
 
 
