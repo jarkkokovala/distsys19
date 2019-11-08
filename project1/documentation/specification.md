@@ -1,6 +1,6 @@
 # Specification
 
-![Network diagram][diagram1.png]
+![Network diagram][./diagram1.png]
 
 ## Logical Components
 
