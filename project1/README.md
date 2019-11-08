@@ -16,11 +16,9 @@ The name node will start listening to http requests at address '127.0.0.1', port
 
 #### Sending a request
 
-After name node has been started it can be queried using for example a web browser. To query the name node type:
+After name node has been started it can be communicated with. To send a GET request, using a web browser navigate to:
 
-    $ http://localhost:10001/
-    
-in your browser.
+    http://localhost:10001/
 
 #### Stopping
 
@@ -41,9 +39,9 @@ The file node will start listening to http requests at address '127.0.0.1', port
 
 #### Sending a request
 
-After name node has been started it can be queried using for example a web browser. To query the name node type browse to:
+After name node has been started it can be communicated with. To send a GET request, using a web browser navigate to:
 
-    $ http://localhost:10002/
+    http://localhost:10002/
     
 #### Stopping
 
