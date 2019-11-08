@@ -14,13 +14,17 @@
 
 ##### Client -> Name Node
 
-* Get file list, response: list of files in the file system (SYNC)
-* Get file node address, response: ip-address and port number (SYNC)
+* Get file list (ASYNC)
+    * The name node responds with a list of files in the file system
+* Get file node address (SYNC)
+    * The name node responds with an ip-address and port number
 
 ##### Client -> File Node
 
-* PUT file, response: ok (SYNC)
-* GET file, response: the file (SYNC)
+* PUT file (SYNC)
+    * File node responses with ok
+* GET file (SYNC)
+    * File node responses with the file
 
 ### Name Node
 
@@ -48,7 +52,7 @@ None
 
 * Worker node
 * There can be many
-* Registers itself on the name node when it's started
+* Registers itself on the name node when started
 * Handles storing the actual files
 
 ##### File Node -> Client
@@ -57,8 +61,10 @@ None
 
 ##### File Node -> Name Node
 
-* Register 
-* Send file list 
-* Send heartbeat 
+* Register (ASYNC)
+    * Name node responds with OK
+* Send file list (ASYNC)
+    * Name node responds with OK
+* Send heartbeat (NO RESPONSE)
 
 
