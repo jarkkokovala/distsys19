@@ -3,3 +3,6 @@
 
 # Python
 __pycache__/
+
+# Other
+async_test.py

@@ -1,49 +1,50 @@
 import argparse
-from http.server import HTTPServer, BaseHTTPRequestHandler
-import logging
-from sys import stdout
-
+import random
 from nameNode import NameNode
 from fileNode import FileNode
+import utility
 
+logger = utility.logger.get_logger('dfs')
 
-def init_logging():
-    log = logging.getLogger('')
-    handler = logging.StreamHandler(stdout)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    log.setLevel(logging.DEBUG)
-    log.addHandler(handler)
-    return log
+def parse_args():
+    """
+    Parse command line arguments
+    :return: node_type, ip_address, port, name_node_ip_address, name_node_port
+    """
+    parser = argparse.ArgumentParser(description="Run name node of the distributed file system")
+    parser.add_argument("-t", "--nodeType", default="nameNode", help="Type of the node/app: nameNode, fileNode, client")
+    parser.add_argument("-i", "--ipAddress", default="127.0.0.1", help="Name node ip address")
+    parser.add_argument("-p", "--port", default=None, type=int, help="Name node port number")
+    parser.add_argument("-nni", "--nameNodeIpAddress", default="127.0.0.1", help="Name node ip address")
+    parser.add_argument("-nnp", "--nameNodePort", default=None, type=int, help="Name node port number")
+    args = parser.parse_args()
+    return args.nodeType, args.ipAddress, args.port, args.nameNodeIpAddress, args.nameNodePort
 
 
 def get_port():
-    return 10002
-
-
-def parse_args():
-    parser = argparse.ArgumentParser(description="Run name node of the distributed file system")
-    parser.add_argument("-n", "--nodeType", default="nameNode", help="Type of the node/app: nameNode, fileNode, client")
-    parser.add_argument("-i", "--ipAddress", default="127.0.0.1", help="Name node ip address")
-    parser.add_argument("-p", "--port", default=None, type=int, help="Name node port number")
-    args = parser.parse_args()
-    return args.nodeType, args.ipAddress, args.port
-
-
-def run(ip_address, port, handler_class, server_class=HTTPServer):
-    server_address = (ip_address, port)
-    httpd = server_class(server_address, handler_class)
-    log.info('Listening to %s port %i', ip_address, port)
-    httpd.serve_forever()
+    """
+    Get a random port number in range (10002, 11001)
+    :return: Port number as integer
+    """
+    return 10001 + random.randint(1, 1000)
 
 
 if __name__ == '__main__':
-    log = init_logging()
-    node_type, ip_address, port = parse_args()
-
+    node_type, ip_address, port, name_node_ip_address, name_node_port = parse_args()
     if node_type == "nameNode":
-        log.info('Starting the Name Node')
-        run(ip_address, (port or 10001), NameNode)
+        logger.info('Starting the Name Node')
+        node = NameNode(ip_address, (port or 10001))
+        node.run()
     elif node_type == "fileNode":
-        log.info('Starting a File Node')
-        run(ip_address, (port or get_port()), FileNode)
+        logger.info('Starting a File Node')
+        if not (name_node_ip_address and name_node_port):
+            logger.error('Name node ip address and/or port undefined')
+        else:
+            while True:
+                try:
+                    node = FileNode(ip_address, (port or get_port()), name_node_ip_address, name_node_port, '../../dfs/' + str(port))
+                    node.run()
+                    break
+                except OSError as ex:
+                    logger.debug(ex.strerror)
+
