@@ -26,7 +26,7 @@ def get_port():
     Get a random port number in range (10002, 11001)
     :return: Port number as integer
     """
-    return 10001 + random.randint(1, 1000)
+    return 10001 + random.randint(1, 1) # 1000
 
 
 if __name__ == '__main__':
