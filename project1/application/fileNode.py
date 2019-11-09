@@ -8,7 +8,7 @@ import utility.logger
 
 
 class FileNode:
-    HEARTBEAT_INTERVAL = 60
+    HEARTBEAT_INTERVAL = 5
     logger = utility.logger.get_logger('FileNode')
 
     def __init__(self, ip_address, port, name_node_ip_address, name_node_port, file_root):
@@ -68,7 +68,7 @@ class FileNode:
         :return:
         """
         server = HTTPServer(self.address, FileNodeHTTPRequestHandler)
-        server.node = self
+        server.node = self    ######  <== Setting the node argument allows the FileNodeHTTPRequestHandler to call this FileNode instance
         FileNode.logger.info('Listening to %s port %i' % self.address)
         server.serve_forever()
 
@@ -92,6 +92,12 @@ class FileNode:
         FileNode.logger.debug('Heartbeat sent')
 
     def put_file(self, file_name, file_content):
+        """
+        Store the file on disk
+        :param file_name: Name of the file
+        :param file_content: Content of the file
+        :return:
+        """
         # Store the file on disk
         FileNode.logger.info('Storing file `%s` on disk' % file_name)
 
@@ -145,8 +151,11 @@ class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
          * Client: PUT file
         :return:
         """
+        # Handle requet
+        content_len = int(self.headers.get('Content-Length', 0))
+        file_name = self.headers.get('File-Name', 0)
+        file_content = self.rfile.read(content_len)
+        self.server.node.put_file(file_name, file_content)
+        # Response
         self._set_headers()
         self.wfile.write(self._message('This is the file node at %s' % datetime.now().strftime("%m/%d/%Y, %H:%M:%S")))
-        # call the node to store the file
-        file_name, file_content = ('the name', 'the content')
-        self.server.node.put_file(file_name, file_content)
