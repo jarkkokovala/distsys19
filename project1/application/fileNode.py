@@ -7,8 +7,8 @@ import time
 import utility.logger
 
 
-
 class FileNode:
+    HEARTBEAT_INTERVAL = 60
     logger = utility.logger.get_logger('FileNode')
 
     def __init__(self, ip_address, port, name_node_ip_address, name_node_port, file_root):
@@ -41,10 +41,10 @@ class FileNode:
             http_thread.shutdown()
             sys.exit(0)
 
-        # Run timer task(s) in main thread
+        # Run timered task(s) in main thread
         while True:
             self.send_heartbeat()
-            time.sleep(5) # Seconds
+            time.sleep(FileNode.HEARTBEAT_INTERVAL) # Seconds
 
     def register(self):
         """
@@ -91,6 +91,13 @@ class FileNode:
             pass
         FileNode.logger.debug('Heartbeat sent')
 
+    def put_file(self, file_name, file_content):
+        # Store the file on disk
+        FileNode.logger.info('Storing file `%s` on disk' % file_name)
+
+        # Send file list to server
+        self.send_filelist()
+
     def send_filelist(self):
         """
         Send a HTTP POST request to update the file list on name server
@@ -124,7 +131,22 @@ class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
         return content.encode("utf8")  # NOTE: must return a bytes object!
 
     def do_GET(self):
+        """
+        Handle GET requests
+         * Client: GET file
+        :return:
+        """
         self._set_headers()
         self.wfile.write(self._message('This is the file node at %s' % datetime.now().strftime("%m/%d/%Y, %H:%M:%S")))
-        self.server.node.send_filelist()
-        # FileNodeHTTPRequestHandler.logger.info()
+
+    def do_PUT(self):
+        """
+        Handle PUT requests
+         * Client: PUT file
+        :return:
+        """
+        self._set_headers()
+        self.wfile.write(self._message('This is the file node at %s' % datetime.now().strftime("%m/%d/%Y, %H:%M:%S")))
+        # call the node to store the file
+        file_name, file_content = ('the name', 'the content')
+        self.server.node.put_file(file_name, file_content)

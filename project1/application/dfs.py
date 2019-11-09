@@ -13,8 +13,8 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(description="Run name node of the distributed file system")
     parser.add_argument("-t", "--nodeType", default="nameNode", help="Type of the node/app: nameNode, fileNode, client")
-    parser.add_argument("-i", "--ipAddress", default="127.0.0.1", help="Name node ip address")
-    parser.add_argument("-p", "--port", default=None, type=int, help="Name node port number")
+    parser.add_argument("-i", "--ipAddress", default="127.0.0.1", help="Node ip address")
+    parser.add_argument("-p", "--port", default=None, type=int, help="Node port number")
     parser.add_argument("-nni", "--nameNodeIpAddress", default="127.0.0.1", help="Name node ip address")
     parser.add_argument("-nnp", "--nameNodePort", default=None, type=int, help="Name node port number")
     args = parser.parse_args()
@@ -26,7 +26,7 @@ def get_port():
     Get a random port number in range (10002, 11001)
     :return: Port number as integer
     """
-    return 10001 + random.randint(1, 1) # 1000
+    return 10001 + random.randint(1, 10) # 1000
 
 
 if __name__ == '__main__':

@@ -47,4 +47,7 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self._set_headers()
         self.wfile.write(self._message('This is the name node at %s' % datetime.now().strftime("%m/%d/%Y, %H:%M:%S")))
-        # FileNodeHTTPRequestHandler.logger.info()
+
+    def do_POST(self):
+        self._set_headers()
+        self.wfile.write(self._message('This is the name node at %s' % datetime.now().strftime("%m/%d/%Y, %H:%M:%S")))
