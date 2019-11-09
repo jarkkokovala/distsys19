@@ -2,7 +2,7 @@
 
 ## Running the dfs
 
-### Start the name node
+### Starting the name node
 
 Cd to the program's main directory:
 
@@ -20,12 +20,11 @@ After name node has been started it can be communicated with. To send a simple G
 
     http://localhost:10001/
 
-#### Stopping
+#### Stopping the node
 
 You may stop program execution at any time by typing Ctrl+C.
 
-
-### Start the file node
+### Starting a file node
 
 Cd to the program's main directory:
 
@@ -43,7 +42,7 @@ After name node has been started it can be communicated with. To send a simple G
 
     http://localhost:10002/
     
-#### Stopping
+#### Stopping the node
 
 You may stop program execution at any time by typing Ctrl+C.
 
