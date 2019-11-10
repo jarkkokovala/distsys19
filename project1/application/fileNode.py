@@ -143,7 +143,7 @@ class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
         :return:
         """
         self._set_headers()
-        self.wfile.write(self._message('This is the file node at %s' % datetime.now().strftime("%m/%d/%Y, %H:%M:%S")))
+        self.wfile.write(self._message('This is the file node %s:%i at %s' % (self.server.node.address[0], self.server.node.address[1], datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))))
 
     def do_PUT(self):
         """
@@ -151,11 +151,11 @@ class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
          * Client: PUT file
         :return:
         """
-        # Handle requet
+        # Handle the request
         content_len = int(self.headers.get('Content-Length', 0))
         file_name = self.headers.get('File-Name', 0)
         file_content = self.rfile.read(content_len)
         self.server.node.put_file(file_name, file_content)
-        # Response
+        # Send response to client
         self._set_headers()
-        self.wfile.write(self._message('This is the file node at %s' % datetime.now().strftime("%m/%d/%Y, %H:%M:%S")))
+        self.wfile.write(self._message('This is the file node at %s:%i at %s' % (self.server.node.address[0], self.server.node.address[1], datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))))
