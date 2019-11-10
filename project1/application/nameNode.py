@@ -4,8 +4,6 @@ import utility.logger
 
 
 class NameNode:
-    logger = utility.logger.get_logger('NameNode')
-
     def __init__(self, ip_address, port):
         """
         Initialize the node
@@ -14,6 +12,7 @@ class NameNode:
         :return:
         """
         self.address = (ip_address, port)
+        self.logger = utility.logger.get_logger('NameNode')
 
     def run(self):
         """
@@ -27,15 +26,14 @@ class NameNode:
         Run the HTTPServer
         :return:
         """
-        NameNode.logger.info('Listening to %s port %i', self.address[0], self.address[1])
+        self.logger.info('Listening to %s port %i', self.address[0], self.address[1])
         server = HTTPServer(self.address, NameNodeHTTPRequestHandler)
-
+        server.node = self
+        server.logger = self.logger
         server.serve_forever()
 
 
 class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
-    logger = utility.logger.get_logger('NameNodeHTTPRequestHandler')
-
     def _set_headers(self):
         self.send_response(200)
         self.send_header("Content-type", "text/html")

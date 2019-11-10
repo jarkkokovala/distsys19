@@ -28,7 +28,7 @@ def get_port():
     Get a random port number in range (10002, 11001)
     :return: Port number as integer
     """
-    return 10001 + random.randint(1, 10) # 1000
+    return 10001 + random.randint(1, 1000)
 
 
 if __name__ == '__main__':
@@ -41,18 +41,21 @@ if __name__ == '__main__':
         elif node_type == "fileNode":
             logger.info('Starting a File Node')
             i = 0
-            while i < 10: # We don't want to try for ever
+            while i < 10:  # We don't want to try for ever
                 i += 1
                 try:
-                    node = FileNode(ip_address, (port or get_port()), name_node_ip_address, name_node_port, '../../dfs/' + str(port))
+                    p = (port or get_port())
+                    print(p)
+                    node = FileNode(ip_address, p, name_node_ip_address, name_node_port, '../../dfs/' + str(port))
                     node.run()
-                    break
-                finally:  # We don't really need to handle errors, just retry
+                    break  # Break out, we found a free ip port
+                except OSError:   # We don't really need to handle errors, just retry
                     pass
+            if i >= 9:
+                logger.info('It seems that the port number space is congested')
     except KeyboardInterrupt as ex:
         logger.info('A keyboard interrupt was detected')
     except:
         print("Unexpected error: %s", sys.exc_info()[0])
         raise
-
     logger.info('Exiting')

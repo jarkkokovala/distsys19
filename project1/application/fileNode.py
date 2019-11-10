@@ -1,3 +1,4 @@
+import socket
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import requests
@@ -8,8 +9,7 @@ import utility.logger
 
 
 class FileNode:
-    HEARTBEAT_INTERVAL = 5
-    logger = utility.logger.get_logger('FileNode')
+    HEARTBEAT_INTERVAL = 5 # seconds
 
     def __init__(self, ip_address, port, name_node_ip_address, name_node_port, file_root):
         """
@@ -24,12 +24,18 @@ class FileNode:
         self.address = (ip_address, port)
         self.name_node_address = (name_node_ip_address, name_node_port)
         self.file_root = file_root
+        self.logger = utility.logger.get_logger('FileNode %s:%i' % self.address)
 
     def run(self):
         """
         Run the name node
         :return:
         """
+
+        # Check that the port is not in use
+        self.try_port()
+
+        # Register
         self.register()
 
         # Run HTTPServer in it's own thread
@@ -46,6 +52,18 @@ class FileNode:
             self.send_heartbeat()
             time.sleep(FileNode.HEARTBEAT_INTERVAL) # Seconds
 
+    def try_port(self):
+        """
+        Check if port is free, raise error if not
+        :return:
+        """
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            s.bind(self.address)
+        except socket.error:
+            s.close()
+            raise
+
     def register(self):
         """
         Send a HTTP GET request to register on name server
@@ -54,13 +72,13 @@ class FileNode:
         Wait for response from name server
         :return:
         """
-        FileNode.logger.info('Registering on name server %s port %i' % self.name_node_address)
+        self.logger.info('Registering on name server %s port %i' % self.name_node_address)
         url = 'http://%s:%i/register' % self.name_node_address
         params = {
             'ip_address': self.address[0],
             'port': self.address[1]}
         response = requests.get(url=url, params=params)
-        FileNode.logger.info('Registering done. Name Server responded with %s' % str(response))
+        self.logger.info('Registering done. Name Server responded with %s' % str(response))
 
     def run_httpserver(self):
         """
@@ -68,8 +86,9 @@ class FileNode:
         :return:
         """
         server = HTTPServer(self.address, FileNodeHTTPRequestHandler)
-        server.node = self    ######  <== Setting the node argument allows the FileNodeHTTPRequestHandler to call this FileNode instance
-        FileNode.logger.info('Listening to %s port %i' % self.address)
+        server.node = self    # <-- This allows the FileNodeHTTPRequestHandler to call this FileNode instance
+        server.logger = self.logger
+        self.logger.info('Listening to %s port %i' % self.address)
         server.serve_forever()
 
     def send_heartbeat(self):
@@ -79,7 +98,7 @@ class FileNode:
         Wait for response from name server
         :return:
         """
-        FileNode.logger.info('Sending heartbeat to name server %s port %i' % self.name_node_address)
+        self.logger.info('Sending heartbeat to name server %s port %i' % self.name_node_address)
         url = 'http://%s:%i/heartbeat' % self.name_node_address
         params = {
             'ip_address': self.address[0],
@@ -89,17 +108,17 @@ class FileNode:
             requests.get(url=url, params=params, timeout=0.0000000001)
         except requests.exceptions.ReadTimeout:
             pass
-        FileNode.logger.debug('Heartbeat sent')
+        self.logger.info('Heartbeat sent')
 
-    def put_file(self, file_name, file_content):
+    def store_file(self, file_name, file_content):
         """
         Store the file on disk
         :param file_name: Name of the file
         :param file_content: Content of the file
         :return:
         """
+        self.logger.info('Storing file `%s` on disk' % file_name)
         # Store the file on disk
-        FileNode.logger.info('Storing file `%s` on disk' % file_name)
 
         # Send file list to server
         self.send_filelist()
@@ -110,7 +129,7 @@ class FileNode:
         http://127.0.0.1:10001/filelist/?ip_address=127.0.0.1&port=10002
         :return:
         """
-        FileNode.logger.info('Sending file list to name server %s port %i' % self.name_node_address)
+        self.logger.info('Sending file list to name server %s port %i' % self.name_node_address)
         params = tuple([i for x in (self.name_node_address, self.address) for i in x])
         url = 'http://%s:%i/filelist?ip_address=%s&port=%i' % params
         data = {
@@ -118,16 +137,14 @@ class FileNode:
             'port': self.address[1],
             'file_list': {}}
         try:
-            # We don't want to wait for the response so we time-out quick
+            # We just want to send the request and not wait for the response => time-out quick
             requests.post(url=url, data=data, timeout=0.0000000001)
         except requests.exceptions.ReadTimeout:
             pass
-        FileNode.logger.debug('Heartbeat sent')
+        self.logger.info('File list sent')
 
 
 class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
-    logger = utility.logger.get_logger('FileNodeHTTPRequestHandler')
-
     def _set_headers(self):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
@@ -155,7 +172,7 @@ class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
         content_len = int(self.headers.get('Content-Length', 0))
         file_name = self.headers.get('File-Name', 0)
         file_content = self.rfile.read(content_len)
-        self.server.node.put_file(file_name, file_content)
+        self.server.node.store_file(file_name, file_content)  # <-- Here we call the fileNode
         # Send response to client
         self._set_headers()
         self.wfile.write(self._message('This is the file node at %s:%i at %s' % (self.server.node.address[0], self.server.node.address[1], datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))))
