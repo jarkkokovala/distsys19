@@ -46,7 +46,7 @@ if __name__ == '__main__':
                 i += 1
                 try:
                     p = port or get_port()
-                    node = FileNode(ip_address, p, name_node_ip_address, name_node_port, file_system_root or ('../../dfs/' + str(p)))
+                    node = FileNode(ip_address, p, name_node_ip_address, name_node_port, file_system_root or ('../../dfsroot/' + str(p)))
                     node.run()
                     break  # Break out, we found a free port number
                 except OSError as e:
