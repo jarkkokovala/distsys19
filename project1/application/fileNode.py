@@ -1,3 +1,4 @@
+import os
 import socket
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -11,7 +12,7 @@ import utility.logger
 class FileNode:
     HEARTBEAT_INTERVAL = 5 # seconds
 
-    def __init__(self, ip_address, port, name_node_ip_address, name_node_port, file_root):
+    def __init__(self, ip_address, port, name_node_ip_address, name_node_port, file_system_root):
         """
         Initialize the node
         :param ip_address: Ip address
@@ -23,8 +24,10 @@ class FileNode:
         """
         self.address = (ip_address, port)
         self.name_node_address = (name_node_ip_address, name_node_port)
-        self.file_root = file_root
+        self.file_system_root = file_system_root
         self.logger = utility.logger.get_logger('FileNode %s:%i' % self.address)
+        if not os.path.exists(self.file_system_root):
+            os.makedirs(self.file_system_root)
 
     def run(self):
         """
@@ -122,7 +125,11 @@ class FileNode:
         :return:
         """
         self.logger.info('Storing file `%s` on disk' % file_name)
+
         # Store the file on disk
+        with open(os.path.join(self.file_system_root, file_name), "wb") as f:
+            f.write(file_content)
+            f.close()
 
         # Send file list to name node
         self.send_filelist()

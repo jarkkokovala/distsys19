@@ -53,6 +53,8 @@ if __name__ == '__main__':
                     if 'registering on name node' in str(e):
                         logger.info('It seems that there is a problem with the name node %s:%i.' % (name_node_ip_address, name_node_port))
                         break
+                    else:
+                        print(str(e))
             if i >= 9:
                 logger.info('Unable to start the file node. The port number space may be congested.')
     except KeyboardInterrupt as ex:
