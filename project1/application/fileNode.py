@@ -60,25 +60,29 @@ class FileNode:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             s.bind(self.address)
-        except socket.error:
+        except socket.error as e:
             s.close()
-            raise
+            raise OSError("Error in binding to socket %s:%i" % self.address) from e
 
     def register(self):
         """
-        Send a HTTP GET request to register on name server
+        Send a HTTP GET request to register on name node
         http://127.0.0.1:10001/register/?ip_address=127.0.0.1&port=10002
 
-        Wait for response from name server
+        Wait for response from name node
         :return:
         """
-        self.logger.info('Registering on name server %s port %i' % self.name_node_address)
+        self.logger.info('Registering on name node %s:%i' % self.name_node_address)
         url = 'http://%s:%i/register' % self.name_node_address
         params = {
             'ip_address': self.address[0],
             'port': self.address[1]}
-        response = requests.get(url=url, params=params)
-        self.logger.info('Registering done. Name Server responded with %s' % str(response))
+        try:
+            response = requests.get(url=url, params=params)
+        except socket.error as e:
+            self.logger.info('Error in registering on name node %s:%i' % self.name_node_address)
+            raise OSError("Error in registering on name node %s:%i" % self.name_node_address) from e
+        self.logger.info('Registering done. Name node responded with %s' % str(response))
 
     def run_httpserver(self):
         """
@@ -93,12 +97,12 @@ class FileNode:
 
     def send_heartbeat(self):
         """
-        Send a HTTP GET request to register on name server
+        Send a HTTP GET request to register on name node
         http://127.0.0.1:10001/heartbeat/?ip_address=127.0.0.1&port=10002
-        Wait for response from name server
+        Wait for response from name node
         :return:
         """
-        self.logger.info('Sending heartbeat to name server %s port %i' % self.name_node_address)
+        self.logger.info('Sending heartbeat to name node %s port %i' % self.name_node_address)
         url = 'http://%s:%i/heartbeat' % self.name_node_address
         params = {
             'ip_address': self.address[0],
@@ -120,16 +124,16 @@ class FileNode:
         self.logger.info('Storing file `%s` on disk' % file_name)
         # Store the file on disk
 
-        # Send file list to server
+        # Send file list to name node
         self.send_filelist()
 
     def send_filelist(self):
         """
-        Send a HTTP POST request to update the file list on name server
+        Send a HTTP POST request to update the file list on name node
         http://127.0.0.1:10001/filelist/?ip_address=127.0.0.1&port=10002
         :return:
         """
-        self.logger.info('Sending file list to name server %s port %i' % self.name_node_address)
+        self.logger.info('Sending file list to name node %s port %i' % self.name_node_address)
         params = tuple([i for x in (self.name_node_address, self.address) for i in x])
         url = 'http://%s:%i/filelist?ip_address=%s&port=%i' % params
         data = {

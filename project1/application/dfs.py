@@ -17,10 +17,11 @@ def parse_args():
     parser.add_argument("-t", "--nodeType", default="nameNode", help="Type of the node/app: nameNode, fileNode, client")
     parser.add_argument("-i", "--ipAddress", default="127.0.0.1", help="Node ip address")
     parser.add_argument("-p", "--port", default=None, type=int, help="Node port number")
+    parser.add_argument("-r", "--fileSystemRoot", help="File system root")
     parser.add_argument("-nni", "--nameNodeIpAddress", default="127.0.0.1", help="Name node ip address")
     parser.add_argument("-nnp", "--nameNodePort", default=10001, type=int, help="Name node port number")
     args = parser.parse_args()
-    return args.nodeType, args.ipAddress, args.port, args.nameNodeIpAddress, args.nameNodePort
+    return args.nodeType, args.ipAddress, args.port, args.nameNodeIpAddress, args.nameNodePort, args.fileSystemRoot
 
 
 def get_port():
@@ -32,7 +33,7 @@ def get_port():
 
 
 if __name__ == '__main__':
-    node_type, ip_address, port, name_node_ip_address, name_node_port = parse_args()
+    node_type, ip_address, port, name_node_ip_address, name_node_port, file_system_root = parse_args()
     try:
         if node_type == "nameNode":
             logger.info('Starting the Name Node')
@@ -44,15 +45,16 @@ if __name__ == '__main__':
             while i < 10:  # We don't want to try for ever
                 i += 1
                 try:
-                    p = (port or get_port())
-                    print(p)
-                    node = FileNode(ip_address, p, name_node_ip_address, name_node_port, '../../dfs/' + str(port))
+                    p = port or get_port()
+                    node = FileNode(ip_address, p, name_node_ip_address, name_node_port, file_system_root or ('../../dfs/' + str(p)))
                     node.run()
-                    break  # Break out, we found a free ip port
-                except OSError:   # We don't really need to handle errors, just retry
-                    pass
+                    break  # Break out, we found a free port number
+                except OSError as e:
+                    if 'registering on name node' in str(e):
+                        logger.info('It seems that there is a problem with the name node %s:%i.' % (name_node_ip_address, name_node_port))
+                        break
             if i >= 9:
-                logger.info('It seems that the port number space is congested')
+                logger.info('Unable to start the file node. The port number space may be congested.')
     except KeyboardInterrupt as ex:
         logger.info('A keyboard interrupt was detected')
     except:
