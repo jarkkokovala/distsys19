@@ -18,16 +18,46 @@ class NameNode:
         self.fileNodes = {}
 
 
-    def register_fileNode(self, address):
-        self.logger.info('Registered fileNode %s port %i', address[0], address[1])
-        self.fileNodes[address] = { 
+    def register_fileNode(self, addrport):
+        """
+        Register a new filenode
+        :param address: Address and port of the node as tuple
+        :return:
+        """
+        self.logger.info('Registered fileNode %s port %i', addrport[0], addrport[1])
+        self.fileNodes[addrport] = { 
             "last_heartbeat": time.time(),
             "files": []
         }
     
-    def do_heartbeat(self, address):
-        self.logger.info('Received heartbeat from %s port %i', address[0], address[1])
-        self.fileNodes[address]["last_heartbeat"] = time.time()
+    def have_fileNode(self, addrport):
+        """
+        Check if a node is registered with us
+        :param addrport:  Address and port of the node as tuple
+        :return: true if node is registered, false otherwise
+        """
+
+        return addrport in self.fileNodes
+
+    def do_heartbeat(self, addrport):
+        """
+        Process a heartbeat from a fileNode
+        :param addrport: Address and port of the node as tuple
+        :return:
+        """
+
+        self.logger.info('Received heartbeat from %s port %i', addrport[0], addrport[1])
+        self.fileNodes[addrport]["last_heartbeat"] = time.time()
+
+    def update_filelist(self, address, files):
+        """
+        Update the filelist for a fileNode
+        :param addrport: Address and port of the node as tuple
+        :return:
+        """
+
+        self.logger.info('Updating filelist for %s port %i, %i files', address[0], address[1], len(files))
+        self.fileNodes[address]["files"] = files
 
     def run(self):
         """
@@ -61,16 +91,16 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
         query = urlparse(self.path)
         vars = parse_qs(query.query)
 
-        if query.path == "/register":
-            if vars["ip_address"][0] and vars["port"][0]:
+        if query.path == "/register": # Register request from filenode
+            if "ip_address" in vars and "port" in vars:
                 self.server.node.register_fileNode((vars["ip_address"][0], int(vars["port"][0])))
                 self.send_response(200)
                 self.end_headers()
             else:
                 self.send_error(400)
                 self.end_headers()
-        elif query.path == "/heartbeat":
-            if vars["ip_address"][0] and vars["port"][0]:
+        elif query.path == "/heartbeat": # Heartbeat request from filenode
+            if "ip_address" in vars and "port" in vars:
                 self.server.node.do_heartbeat((vars["ip_address"][0], int(vars["port"][0])))
                 self.send_response(200)
                 self.end_headers()
@@ -82,5 +112,28 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
     def do_POST(self):
-        self._set_headers()
-        self.wfile.write(self._message('This is the name node at %s' % datetime.now().strftime("%m/%d/%Y, %H:%M:%S")))
+        query = urlparse(self.path)
+        content_len = int(self.headers.get('Content-Length'))
+        if content_len > 0:
+            body = self.rfile.read(content_len)
+
+        if query.path == "/filelist":
+            vars = parse_qs(body)
+
+            if b"ip_address" in vars and b"port" in vars:
+                fileNode = (vars[b"ip_address"][0].decode('ascii'), int(vars[b"port"][0].decode('ascii')))
+
+                if self.server.node.have_fileNode(fileNode):
+                    if b"file_list" in vars:
+                        self.server.node.update_filelist(fileNode, vars[b"file_list"])
+                    else:
+                        self.server.node.update_filelist(fileNode, [])
+
+                    self.send_response(200)
+                    self.end_headers()
+                else:
+                    self.send_error(400)
+                    self.end_headers()
+            else:
+                self.send_error(400)
+                self.end_headers()

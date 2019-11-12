@@ -87,6 +87,8 @@ class FileNode:
             raise OSError("Error in registering on name node %s:%i" % self.name_node_address) from e
         self.logger.info('Registering done. Name node responded with %s' % str(response))
 
+        self.send_filelist()
+
     def run_httpserver(self):
         """
         Run the HTTPServer
@@ -146,7 +148,7 @@ class FileNode:
         data = {
             'ip_address': self.address[0],
             'port': self.address[1],
-            'file_list': {}}
+            'file_list': []}
         try:
             # We just want to send the request and not wait for the response => time-out quick
             requests.post(url=url, data=data, timeout=0.0000000001)
