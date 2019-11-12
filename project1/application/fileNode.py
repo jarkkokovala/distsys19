@@ -20,6 +20,7 @@ class FileNode:
         :param handler_class: Http handler class, should derive from BaseHTTPRequestHandler
         :param name_node_ip_address: ip address of the name node
         :param name_node_port: port of the name node
+        :param file_system_root: directory where the files are stored for this node
         :return: void
         """
         self.address = (ip_address, port)
@@ -40,6 +41,9 @@ class FileNode:
 
         # Register
         self.register()
+
+        # Initial filelist to nameNode
+        self.send_filelist()
 
         # Run HTTPServer in it's own thread
         http_thread = threading.Thread(target=self.run_httpserver)
@@ -86,8 +90,6 @@ class FileNode:
             self.logger.info('Error in registering on name node %s:%i' % self.name_node_address)
             raise OSError("Error in registering on name node %s:%i" % self.name_node_address) from e
         self.logger.info('Registering done. Name node responded with %s' % str(response))
-
-        self.send_filelist()
 
     def run_httpserver(self):
         """
@@ -148,7 +150,7 @@ class FileNode:
         data = {
             'ip_address': self.address[0],
             'port': self.address[1],
-            'file_list': []}
+            'file_list': {b"foobar.exe": { "mtime": 1234, "size": 4567 }}}
         try:
             # We just want to send the request and not wait for the response => time-out quick
             requests.post(url=url, data=data, timeout=0.0000000001)

@@ -94,14 +94,14 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
         if query.path == "/register": # Register request from filenode
             if "ip_address" in vars and "port" in vars:
                 self.server.node.register_fileNode((vars["ip_address"][0], int(vars["port"][0])))
-                self._set.headers()
+                self._set_headers()
             else:
                 self.send_error(400)
                 self.end_headers()
         elif query.path == "/heartbeat": # Heartbeat request from filenode
             if "ip_address" in vars and "port" in vars:
                 self.server.node.do_heartbeat((vars["ip_address"][0], int(vars["port"][0])))
-                self._set.headers()
+                self._set_headers()
             else:
                 self.send_error(400)
                 self.end_headers()            
@@ -127,7 +127,7 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
                     else:
                         self.server.node.update_filelist(fileNode, [])
 
-                    self._set.headers()
+                    self._set_headers()
                 else:
                     self.send_error(400)
                     self.end_headers()
