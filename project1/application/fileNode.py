@@ -122,11 +122,12 @@ class FileNode:
             pass
         self.logger.info('Heartbeat sent')
 
-    def store_file(self, file_name, file_content):
+    def store_file(self, file_name, file_content, file_mtime):
         """
         Store the file on disk
         :param file_name: Name of the file
         :param file_content: Content of the file
+        :param file_mtime: Last modification time for the file
         :return:
         """
         self.logger.info('Storing file `%s` on disk' % file_name)
@@ -135,6 +136,7 @@ class FileNode:
         with open(os.path.join(self.file_system_root, file_name), "wb") as f:
             f.write(file_content)
             f.close()
+            os.utime(os.path.join(self.file_system_root, file_name), (time.time(), file_mtime))
 
         # Send file list to name node
         self.send_filelist()
@@ -149,11 +151,12 @@ class FileNode:
         params = tuple([i for x in (self.name_node_address, self.address) for i in x])
         url = 'http://%s:%i/filelist?ip_address=%s&port=%i' % params
 
+        # Gather the list of files to send
         files = {}
         for filename in os.listdir(self.file_system_root):
             files[filename] = { 
-                "mtime": os.path.getmtime(self.file_system_root + "/" + filename),
-                "size": os.path.getsize(self.file_system_root + "/" + filename)
+                "mtime": os.path.getmtime(os.path.join(self.file_system_root, filename)),
+                "size": os.path.getsize(os.path.join(self.file_system_root, filename))
             }
 
         data = {
@@ -197,8 +200,9 @@ class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
         # Handle the request
         content_len = int(self.headers.get('Content-Length', 0))
         file_name = os.path.basename(self.headers.get('File-Name', 0))
+        file_mtime = float(self.headers.get('File-Modification-Time', 0))
         file_content = self.rfile.read(content_len)
-        self.server.node.store_file(file_name, file_content)  # <-- Here we call the fileNode
+        self.server.node.store_file(file_name, file_content, file_mtime)  # <-- Here we call the fileNode
         # Send response to client
         self._set_headers()
         self.wfile.write(self._message('This is the file node at %s:%i at %s' % (self.server.node.address[0], self.server.node.address[1], datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))))
