@@ -7,6 +7,12 @@
 Cd to the program's main directory:
 
     $ cd <path-to-download-directory>/project1/application
+    
+You will need to install requests module:
+
+```
+pip install requests
+```
 
 Start the name node:
 
