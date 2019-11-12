@@ -5,8 +5,12 @@ import time
 import pickle
 from urllib.parse import urlparse, parse_qs, unquote
 import json
+import threading
+import sys
 
 class NameNode:
+    FILENODE_TIMEOUT = 15 # Seconds after we time out a filenode if it hasn't sent a heartbeat
+
     def __init__(self, ip_address, port):
         """
         Initialize the node
@@ -17,6 +21,7 @@ class NameNode:
         self.address = (ip_address, port)
         self.logger = utility.logger.get_logger('NameNode')
         self.fileNodes = {}
+        self.fileNodes_lock = threading.Lock()
 
     def register_fileNode(self, addrport):
         """
@@ -25,10 +30,11 @@ class NameNode:
         :return:
         """
         self.logger.info('Registered fileNode %s port %i', addrport[0], addrport[1])
-        self.fileNodes[addrport] = { 
-            "last_heartbeat": time.time(),
-            "files": []
-        }
+        with self.fileNodes_lock:
+            self.fileNodes[addrport] = { 
+                "last_heartbeat": time.time(),
+                "files": []
+            }
     
     def have_fileNode(self, addrport):
         """
@@ -37,7 +43,10 @@ class NameNode:
         :return: true if node is registered, false otherwise
         """
 
-        return addrport in self.fileNodes
+        with self.fileNodes_lock:
+            ret = addrport in self.fileNodes
+            
+        return ret
 
     def do_heartbeat(self, addrport):
         """
@@ -47,7 +56,8 @@ class NameNode:
         """
 
         self.logger.info('Received heartbeat from %s port %i', addrport[0], addrport[1])
-        self.fileNodes[addrport]["last_heartbeat"] = time.time()
+        with self.fileNodes_lock:
+            self.fileNodes[addrport]["last_heartbeat"] = time.time()
 
     def update_filelist(self, addrport, files):
         """
@@ -58,15 +68,34 @@ class NameNode:
         """
 
         self.logger.info('Updating filelist for %s port %i, %i files', addrport[0], addrport[1], len(files))
-        self.fileNodes[addrport]["files"] = files
-        print(files)
+        with self.fileNodes_lock:
+            self.fileNodes[addrport]["files"] = files
 
     def run(self):
         """
         Run the name node
         :return:
         """
-        self.run_httpserver()
+
+        # Run HTTP server in another thread
+        http_thread = threading.Thread(target=self.run_httpserver)
+        http_thread.daemon = True
+
+        try:
+            http_thread.start()
+        except KeyboardInterrupt:
+            http_thread.shutdown()
+            sys.exit(0)
+        
+        # Run timered task(s) in main thread
+        while True:
+            # Check for timed out nodes
+            with self.fileNodes_lock:
+                for node in list(self.fileNodes):
+                    if self.fileNodes[node]["last_heartbeat"] < time.time() - self.FILENODE_TIMEOUT:
+                        self.logger.info('Timing out fileNode %s port %i', node[0], node[1])
+                        del self.fileNodes[node]
+            time.sleep(1)
 
     def run_httpserver(self):
         """
