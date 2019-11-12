@@ -6,6 +6,7 @@ import requests
 import sys
 import threading
 import time
+import pickle
 import utility.logger
 
 
@@ -147,13 +148,23 @@ class FileNode:
         self.logger.info('Sending file list to name node %s port %i' % self.name_node_address)
         params = tuple([i for x in (self.name_node_address, self.address) for i in x])
         url = 'http://%s:%i/filelist?ip_address=%s&port=%i' % params
+
+        files = {}
+        for filename in os.listdir(self.file_system_root):
+            files[filename] = { 
+                "mtime": os.path.getmtime(self.file_system_root + "/" + filename),
+                "size": os.path.getsize(self.file_system_root + "/" + filename)
+            }
+
         data = {
             'ip_address': self.address[0],
             'port': self.address[1],
-            'file_list': {b"foobar.exe": { "mtime": 1234, "size": 4567 }}}
+            'file_list': files
+        }
+
         try:
             # We just want to send the request and not wait for the response => time-out quick
-            requests.post(url=url, data=data, timeout=0.0000000001)
+            requests.post(url=url, json=data, timeout=0.0000000001)
         except requests.exceptions.ReadTimeout:
             pass
         self.logger.info('File list sent')
@@ -185,7 +196,7 @@ class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
         """
         # Handle the request
         content_len = int(self.headers.get('Content-Length', 0))
-        file_name = self.headers.get('File-Name', 0)
+        file_name = os.path.basename(self.headers.get('File-Name', 0))
         file_content = self.rfile.read(content_len)
         self.server.node.store_file(file_name, file_content)  # <-- Here we call the fileNode
         # Send response to client

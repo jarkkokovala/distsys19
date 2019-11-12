@@ -2,8 +2,9 @@ from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import utility.logger
 import time
-from urllib.parse import urlparse, parse_qs
-
+import pickle
+from urllib.parse import urlparse, parse_qs, unquote
+import json
 
 class NameNode:
     def __init__(self, ip_address, port):
@@ -16,7 +17,6 @@ class NameNode:
         self.address = (ip_address, port)
         self.logger = utility.logger.get_logger('NameNode')
         self.fileNodes = {}
-
 
     def register_fileNode(self, addrport):
         """
@@ -49,15 +49,17 @@ class NameNode:
         self.logger.info('Received heartbeat from %s port %i', addrport[0], addrport[1])
         self.fileNodes[addrport]["last_heartbeat"] = time.time()
 
-    def update_filelist(self, address, files):
+    def update_filelist(self, addrport, files):
         """
         Update the filelist for a fileNode
         :param addrport: Address and port of the node as tuple
+        :param files: the new filelist
         :return:
         """
 
-        self.logger.info('Updating filelist for %s port %i, %i files', address[0], address[1], len(files))
-        self.fileNodes[address]["files"] = files
+        self.logger.info('Updating filelist for %s port %i, %i files', addrport[0], addrport[1], len(files))
+        self.fileNodes[addrport]["files"] = files
+        print(files)
 
     def run(self):
         """
@@ -116,14 +118,14 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
             body = self.rfile.read(content_len)
 
         if query.path == "/filelist": # Filelist update from fileNode
-            vars = parse_qs(body)
+            data = json.loads(body.decode('utf-8'))
 
-            if b"ip_address" in vars and b"port" in vars:
-                fileNode = (vars[b"ip_address"][0].decode('ascii'), int(vars[b"port"][0].decode('ascii')))
+            if "ip_address" in data and "port" in data:
+                fileNode = (data["ip_address"], data["port"])
 
                 if self.server.node.have_fileNode(fileNode):
-                    if b"file_list" in vars:
-                        self.server.node.update_filelist(fileNode, vars[b"file_list"])
+                    if "file_list" in data:
+                        self.server.node.update_filelist(fileNode, data["file_list"])
                     else:
                         self.server.node.update_filelist(fileNode, [])
 
@@ -134,3 +136,4 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
             else:
                 self.send_error(400)
                 self.end_headers()
+            self._set_headers()
