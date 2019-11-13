@@ -40,10 +40,10 @@ class FileNode:
         # Check that the port is not in use
         self.try_port()
 
-        # Register
+        # Register on name node
         self.register()
 
-        # Initial filelist to nameNode
+        # Sen dinitial filelist to nameNode
         self.send_filelist()
 
         # Run HTTPServer in it's own thread
@@ -122,12 +122,13 @@ class FileNode:
             pass
         self.logger.info('Heartbeat sent')
 
-    def store_file(self, file_name, file_content, file_mtime):
+    def store_file(self, file_name, file_content, file_mtime, instrumentation_id=''):
         """
         Store the file on disk
         :param file_name: Name of the file
         :param file_content: Content of the file
         :param file_mtime: Last modification time for the file
+        :param instrumentation_id: Internal id for measuring system performance
         :return:
         """
         self.logger.info('Storing file `%s` on disk' % file_name)
@@ -139,9 +140,12 @@ class FileNode:
             os.utime(os.path.join(self.file_system_root, file_name), (time.time(), file_mtime))
 
         # Send file list to name node
-        self.send_filelist()
+        self.send_filelist(instrumentation_id)
 
-    def send_filelist(self):
+        # Replicate the file to N sibling nodes
+        self.replicate_file(file_name, file_content, file_mtime, instrumentation_id)
+
+    def send_filelist(self, instrumentation_id=''):
         """
         Send a HTTP POST request to update the file list on name node
         http://127.0.0.1:10001/filelist/?ip_address=127.0.0.1&port=10002
@@ -158,19 +162,21 @@ class FileNode:
                 "mtime": os.path.getmtime(os.path.join(self.file_system_root, filename)),
                 "size": os.path.getsize(os.path.join(self.file_system_root, filename))
             }
-
         data = {
             'ip_address': self.address[0],
             'port': self.address[1],
-            'file_list': files
+            'file_list': files,
+            'instrumentation_id': instrumentation_id
         }
-
         try:
             # We just want to send the request and not wait for the response => time-out quick
             requests.post(url=url, json=data, timeout=0.0000000001)
         except requests.exceptions.ReadTimeout:
             pass
         self.logger.info('File list sent')
+
+    def replicate_file(self, file_name, file_content, file_mtime, instrumentation_id=''):
+        pass
 
 
 class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -197,12 +203,17 @@ class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
          * Client: PUT file
         :return:
         """
+
         # Handle the request
         content_len = int(self.headers.get('Content-Length', 0))
         file_name = os.path.basename(self.headers.get('File-Name', 0))
         file_mtime = float(self.headers.get('File-Modification-Time', 0))
         file_content = self.rfile.read(content_len)
-        self.server.node.store_file(file_name, file_content, file_mtime)  # <-- Here we call the fileNode
+        instrumentation_id = self.headers.get('Instrumentation-Id')
+
+        # TODO: This method should be ASYNC so that we can quickly return a response to client
+        self.server.node.store_file(file_name, file_content, file_mtime, instrumentation_id)  # <-- Here we call the fileNode
+
         # Send response to client
         self._set_headers()
         self.wfile.write(self._message('This is the file node at %s:%i at %s' % (self.server.node.address[0], self.server.node.address[1], datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))))

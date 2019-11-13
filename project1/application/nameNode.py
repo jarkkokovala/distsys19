@@ -1,15 +1,17 @@
-from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import utility.logger
 import time
-import pickle
 from urllib.parse import urlparse, parse_qs, unquote
 import json
 import threading
+from random import shuffle
 import sys
+from utility.instrumentation import instrumentation
+
 
 class NameNode:
     FILENODE_TIMEOUT = 15 # Seconds after we time out a filenode if it hasn't sent a heartbeat
+    REPLICA_N = 1
 
     def __init__(self, ip_address, port):
         """
@@ -35,18 +37,40 @@ class NameNode:
                 "last_heartbeat": time.time(),
                 "files": []
             }
-    
+
     def have_fileNode(self, addrport):
         """
         Check if a node is registered with us
         :param addrport:  Address and port of the node as tuple
         :return: true if node is registered, false otherwise
         """
-
         with self.fileNodes_lock:
             ret = addrport in self.fileNodes
-            
         return ret
+
+    def get_fileNode(self, file_name='',  instrumentation_id=''):
+        """
+        Return a fileNode's address and port
+        :param addressFilter: address to filter as a tuple of (ip_address, port_number)
+        :return: a fileNode with the file of name file_name or a random fileNode
+        """
+        instrumentation.warning("%s;%s;%s" % ("NameNode", "get_fileNode", instrumentation_id))
+        with self.fileNodes_lock:
+            # TODO: Select the correct fileNode
+            ret = list(self.fileNodes.keys())[0]
+        print(ret)
+        return ret
+
+    def get_replica_fileNodes(self, filter_address, instrumentation_id=''):
+        """
+        Get a list of replica fileNodes
+        :param addressFilter: address to filter from the list as a tuple of (ip_address, port_number)
+        :return: First NameNode.REPLICA_N fileNodes in random order
+        """
+        instrumentation.warning("%s;%s;%s" % ("NameNode", "get_replica_fileNodes", instrumentation_id))
+        with self.fileNodes_lock:
+            ret = self.fileNodes
+        return [x for x in shuffle(ret) if not x == filter_address][:NameNode.REPLICA_N]
 
     def do_heartbeat(self, addrport):
         """
@@ -59,17 +83,17 @@ class NameNode:
         with self.fileNodes_lock:
             self.fileNodes[addrport]["last_heartbeat"] = time.time()
 
-    def update_filelist(self, addrport, files):
+    def update_filelist(self, addrport, files, instrumentation_id=''):
         """
         Update the filelist for a fileNode
         :param addrport: Address and port of the node as tuple
         :param files: the new filelist
         :return:
         """
-
         self.logger.info('Updating filelist for %s port %i, %i files', addrport[0], addrport[1], len(files))
         with self.fileNodes_lock:
             self.fileNodes[addrport]["files"] = files
+        instrumentation.warning("%s;%s;%s" % ("NameNode", "update_filelist", instrumentation_id))
 
     def run(self):
         """
@@ -119,26 +143,55 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
         return content.encode("utf8")  # NOTE: must return a bytes object!
 
     def do_GET(self):
-        query = urlparse(self.path)
-        vars = parse_qs(query.query)
+        url = urlparse(self.path)
+        query = parse_qs(url.query)
+        instrumentation_id = self.headers.get('Instrumentation-Id')
+        #print(self.headers)
+        response_code = 200
 
-        if query.path == "/register": # Register request from filenode
-            if "ip_address" in vars and "port" in vars:
-                self.server.node.register_fileNode((vars["ip_address"][0], int(vars["port"][0])))
-                self._set_headers()
+        address = None
+        if "ip_address" in query and "port" in query:
+            address = (query["ip_address"][0], int(query["port"][0]))
+
+        file_name = None
+        if "file_name" in query:
+            file_name = query["file_name"][0]
+
+        if url.path == "/register": # Register request from filenode
+            if address:
+                self.server.node.register_fileNode(address)
             else:
-                self.send_error(400)
-                self.end_headers()
-        elif query.path == "/heartbeat": # Heartbeat request from filenode
-            if "ip_address" in vars and "port" in vars:
-                self.server.node.do_heartbeat((vars["ip_address"][0], int(vars["port"][0])))
-                self._set_headers()
+                response_code = 400
+        elif url.path == "/heartbeat": # Heartbeat request from filenode
+            if address:
+                self.server.node.do_heartbeat(address)
             else:
-                self.send_error(400)
-                self.end_headers()            
+                response_code = 400
+        elif url.path == "/filenode": # Get fileNode request from client
+            file_node = self.server.node.get_fileNode(file_name, instrumentation_id)
+            if file_node:
+                # TODO: Return fileNode address to client
+                print(file_node)
+            else:
+                response_code = 400
+        elif url.path == "/replicanodes":
+            if address:
+                replica_nodes = self.server.node.get_replica_fileNodes(address, instrumentation_id)
+                if replica_nodes:
+                    # TODO: Return replica fileNodes' addresses to primary fileNode
+                    print(replica_nodes)
+                else:
+                    response_code = 400
+            else:
+                response_code = 400
         else:
-            self.send_error(404)
+            response_code = 404 # Not found
+
+        if not response_code == 200:
+            self.send_error(response_code)
             self.end_headers()
+
+        self._set_headers()
 
     def do_POST(self):
         query = urlparse(self.path)

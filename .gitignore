@@ -1,2 +1,5 @@
 # Project 1 file system root
 dfsroot/
+
+# Project 1 instrumentation root
+dfslog/
