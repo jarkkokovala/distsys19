@@ -1,6 +1,6 @@
 # Specification
 
-![Network diagram](./diagram1.png)
+![System overview](./diagram1.png)
 <!--https://www.lucidchart.com/documents/edit/c57d43b0-ede6-4ecb-a284-c0ca66047a74-->
 
 ## Logical Components
@@ -66,5 +66,13 @@ None
 * Send file list (ASYNC)
     * Name node responds with OK
 * Send heartbeat (NO RESPONSE)
+
+
+## Communication
+
+![Sequence diagram for storing a file](./sequence1.png)
+<!--https://www.lucidchart.com/documents/edit/66b3bccc-280f-48a8-b0be-1ba4f7274a9b-->
+
+
 
 
