@@ -17,7 +17,7 @@
 ##### Communication
 
 | Node from | | Node to | |
-| --- | --- | --- |
+| --- | --- | --- | --- |
 | Client | -- HTTP GET --> | Name Node | Get file list |
 
 
