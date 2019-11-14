@@ -37,13 +37,13 @@
     * File nodes register themselves on the name node when they are started
     * File nodes send heartbeats to the name node
 
-###### Name Node -> Client
+##### Communication
 
-None
+NOT IMPLEMENTED
 
-###### Name Node -> File Node
-
-None
+| Node from | | Node to | |
+| --- | --- | --- | --- |
+| Name node | HTTP POST | File node | Tell the file node to replicate certain file to a certain other node (for fault tolerance). |
 
 #### File Node
 
