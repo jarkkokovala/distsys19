@@ -20,7 +20,7 @@ Jarkko Kovala, Eeva-Maria Laiho, Paavo Hemmo
     - clientin pyyntöihin vastaaminen: Paavo
 - clientin toteutus: Paavo
 - videodemo. 
-- mitoitus
+- mitoitus: Eeva-Maria
 
 ### Report: 
 
