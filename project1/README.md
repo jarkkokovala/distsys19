@@ -1,16 +1,17 @@
-Project 1, A distributed system
+### Project 1, a distributed system
 
 # Report
 
-### Project’s purpose and core functionality
+## Project Description
 
-### System design 
+Project’s purpose and core functionality
 
-#### Architecture
+## Documentation
 
-#### Processes
+* [System design](./documents/definition.md)
+* [Installation and execution guide](./documents/installation.md).
 
-#### Communication
+
 
 ### Problems encountered, and lessons learned
 
