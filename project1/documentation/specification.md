@@ -62,6 +62,10 @@
 
 ## Communication
 
+The messages sent between system components are described in the Processes section.
+
+A communication sequence for storing a file is decribed in the following picture.
+
 ![Sequence diagram for storing a file](./sequence1.png)
 <!--https://www.lucidchart.com/documents/edit/66b3bccc-280f-48a8-b0be-1ba4f7274a9b-->
 
