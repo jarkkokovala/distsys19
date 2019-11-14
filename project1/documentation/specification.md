@@ -5,6 +5,8 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 ## Architecture
 
+FILL IN HERE
+
 ## Processes / logical components
 
 ![System overview](./diagram1.png)
