@@ -1,6 +1,6 @@
-# Project 1: A distributed system
+### Project 1, A distributed system
 
-## Report
+# Report
 
 ### Project’s purpose and core functionality
 
