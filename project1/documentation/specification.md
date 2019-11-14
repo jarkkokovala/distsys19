@@ -17,11 +17,11 @@
 
 ##### Communication
 
-| Node from | | Node to | |
-| --- | --- | --- | --- |
-| Client | HTTP GET | Name Node | Query file node ip-address ad port (for GETting, PUTting a file). Wait for response. The name node responds with an ip-address and port number. |
-| Client | HTTP PUT | File Node | Store file on file node. Wait for reponse. File node responses when message is received. Not when file is stored. |
-| Client | HTTP GET | File Node | Read file from file node. Wait for reponse. File node responses with the file. |
+| Node from | Node to | | | |
+| --- | --- | --- | --- | --- |--- |
+| Client | -> | Name Node | HTTP GET | Query file node ip-address ad port (for GETting, PUTting a file). Wait for response. The name node responds with an ip-address and port number. |
+| Client | -> | File Node | HTTP PUT | Store file on file node. Wait for reponse. File node responses when message is received. Not when file is stored. |
+| Client | -> | File Node | HTTP GET |  Read file from file node. Wait for reponse. File node responses with the file. |
 
 #### Name Node
 
