@@ -1,4 +1,5 @@
 ### Project 1, a distributed system
+Jarkko Kovala, Eeva-Maria Laiho, Paavo Hemmo
 
 # Report
 
