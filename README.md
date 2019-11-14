@@ -10,13 +10,13 @@ Jarkko Kovala, Eeva-Maria Laiho, Paavo Hemmo
 ## Mitä (ainakin) puuttuu:
 
 - tiedostosolmu: 
-    - ~~tiedoston tallennus levylle, 
-    - ~~tiedostoluettelon lähetys nimipalvelusolmulle, 
+    - ~~tiedoston tallennus levylle~~, 
+    - ~~tiedostoluettelon lähetys nimipalvelusolmulle~~, 
     - tiedostojen replikointi (riittää varmaan, että replikoidaan yhdelle sisarsolmulle): Jarkko
 - nimipalvelisolmu
-    - ~~tiedostosolmun rekisteröiminen, 
-    - ~~solmun kaatumisen havaitseminen (heartbeat), 
-    - ~~tiedostoluettelon hallinta, 
+    - ~~tiedostosolmun rekisteröiminen~~, 
+    - ~~solmun kaatumisen havaitseminen (heartbeat)~~, 
+    - ~~tiedostoluettelon hallinta~~, 
     - clientin pyyntöihin vastaaminen: Paavo
 - clientin toteutus: Paavo
 - videodemo. 
