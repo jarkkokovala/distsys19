@@ -31,9 +31,9 @@ FILL IN HERE
 * Master node
 * Single point of failure
 * Always running/listening
-* The client's and a (novel) file node's first point of contact
+* The client's and a file node's first point of contact
     * Informs the client which file node to use for PUT and GET
-    * Adds the (novel) file node as part of the system (i.e. in the node list)
+    * Adds the file node as part of the system (i.e. in the node list)
 * Maintains a list of files
     * The file nodes inform the name node of their files when there are changes
 * Maintains a list of file nodes
