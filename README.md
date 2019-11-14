@@ -10,7 +10,7 @@ Jarkko Kovala, Eeva-Maria Laiho, Paavo Hemmo
 ## Mitä (ainakin) puuttuu:
 
 - tiedostosolmu: 
-    - tiedoston tallennus levylle, 
+    - -tiedoston tallennus levylle-, 
     - tiedostoluettelon lähetys nimipalvelusolmulle, 
     - tiedostojen replikointi (riittää varmaan, että replikoidaan yhdelle sisarsolmulle)
 - nimipalvelisolmu
