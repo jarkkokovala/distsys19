@@ -19,8 +19,6 @@
 
 | Node from | Node to | | | |
 | --- | --- | --- | --- | --- |
-
-
 | Client | -> | Name Node | HTTP GET | Query file node ip-address ad port (for GETting, PUTting a file). Wait for response. The name node responds with an ip-address and port number. |
 
 | Client | -> | File Node | HTTP PUT | Store file on file node. Wait for reponse. File node responses when message is received. Not when file is stored. |
