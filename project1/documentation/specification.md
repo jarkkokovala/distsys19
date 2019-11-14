@@ -65,6 +65,8 @@ FILL IN HERE
 
 ## Communication
 
+Communication between dfs client and nodes (name node, file nodes) as well as between nodes is handled via HTTP protocol. HTTP protocol was selected primarily for ease of implementation with python programmin language. In a real distributed file system a protocol other HTTP would be more suitable at least for short messages sent between the nodes like the heartbeat message sent from file nodes to the name node. 
+
 The messages sent between system components are described above in the Processes section.
 
 A communication sequence for storing a single file is decribed in the following picture.
