@@ -1,3 +1,5 @@
+### Project 1, a distributed system
+Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 # Intallation and execution
 
