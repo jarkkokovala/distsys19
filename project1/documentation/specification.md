@@ -39,11 +39,9 @@
 
 ##### Communication
 
-NOT IMPLEMENTED
-
-| Node from | | Node to | |
+~~| Node from | | Node to | |
 | --- | --- | --- | --- |
-| Name node | HTTP POST | File node | Tell the file node to replicate certain file to a certain other node (for fault tolerance). |
+| Name node | HTTP POST | File node | Tell the file node to replicate certain file to a certain other node (for fault tolerance). |~~
 
 #### File Node
 
@@ -52,18 +50,15 @@ NOT IMPLEMENTED
 * Registers itself on the name node when started
 * Handles storing the actual files
 
-###### File Node -> Client
 
-None
+##### Communication
 
-###### File Node -> Name Node
-
-* Register (ASYNC)
-    * Name node responds with OK
-* Send file list (ASYNC)
-    * Name node responds with OK
-* Send heartbeat (NO RESPONSE)
-
+| Node from | | Node to | |
+| --- | --- | --- | --- |
+| File node | HTTP POST | Name node | Register file node on name node. Do not wait or response. |
+| File node | HTTP POST | Name node | Send file list to name node. Do not wait or response. |
+| File node | HTTP POST | Name node | Send heartbeat to name node. Do not wait or response. |
+| File node | HTTP POST | File node (replica) | Send file for replication to another file node. Do not wait or response. |
 
 ## Communication
 
