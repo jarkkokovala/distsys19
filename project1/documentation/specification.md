@@ -1,3 +1,6 @@
+### Project 1, a distributed system
+Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
+
 # System design
 
 ## Architecture
