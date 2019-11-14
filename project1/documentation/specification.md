@@ -16,6 +16,10 @@
 
 ##### Communication
 
+| Node from | | Node to | |
+| --- | --- | --- |
+| Client | -- HTTP GET --> | Name Node | Get file list |
+
 ###### Client -> Name Node
 
 * Get file list (ASYNC)
