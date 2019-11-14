@@ -16,6 +16,7 @@
 
 ### Instructions for installation and execution
 
+[./documents/installation.md](Installation and execution guide.)
 
 ### Measurements
 
