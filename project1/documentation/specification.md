@@ -13,33 +13,15 @@
 
 * Client software
 * Provides access to the distributed file system. 
+* There can be many.
 
 ##### Communication
 
 | Node from | | Node to | |
 | --- | --- | --- | --- |
-| Client | -- HTTP GET --> | Name Node | Get file list |
-
-
-| Command | Description |
-| --- | --- |
-| `git status` | List all *new or modified* files |
-| `git diff` | Show file differences that **haven't been** staged |
-
-
-###### Client -> Name Node
-
-* Get file list (ASYNC)
-    * The name node responds with a list of files in the file system
-* Get file node address (SYNC)
-    * The name node responds with an ip-address and port number
-
-###### Client -> File Node
-
-* PUT file (SYNC)
-    * File node responses with ok
-* GET file (SYNC)
-    * File node responses with the file
+| Client | HTTP GET | Name Node | Query file node ip-address ad port (for GETting, PUTting a file). Wait for response. The name node responds with an ip-address and port number. |
+| Client | HTTP PUT | File Node | Store file on file node. Wait for reponse. File node responses when message is received. Not when file is stored. |
+| Client | HTTP GET | File Node | Read file from file node. Wait for reponse. File node responses with the file. |
 
 #### Name Node
 
