@@ -1,55 +1,31 @@
-# Project 1
+# Project 1: A distributed system
 
-## Running the dfs
+## Report
 
-### Starting the name node
+### Project’s purpose and core functionality
 
-Cd to the program's main directory:
+### System design 
 
-    $ cd <path-to-download-directory>/project1/application
-    
-You will need to install requests module:
+#### Architecture
 
-```
-pip install requests
-```
+#### Processes
 
-Start the name node:
+#### Communication
 
-    $ python3 dfs.py
+### Problems encountered, and lessons learned
 
-The name node will start listening to http requests at default address '127.0.0.1', port 10001. Non-default ip address and port number can be defined by passing parameters $-i$ (ip address) and $-p$ (port number).
+### Instructions for installation and execution
 
-#### Sending a request
 
-After name node has been started it can be communicated with. To send a simple GET request, using a web browser navigate to:
+### Measurements
 
-    http://localhost:10001/
+#### What is the average time for sending 50 messages between two nodes (random payload)?
 
-#### Stopping the node
+#### Choose 3 different fixed message sizes (payloads for min, average, max), what is the average time when sending 25 in each case?
 
-You may stop program execution at any time by typing Ctrl+C.
+#### Choose a unique payload, e.g., average size, and then measure the inter arrival rate between messages?
 
-### Starting a file node
+#### How reliable is your architecture? 
 
-Cd to the program's main directory:
-
-    $ cd <path-to-download-directory>/project1/application
-
-Start the file node:
-
-    $ python3 dfs.py -t fileNode -p 10002 -nni '127.0.0.1' -nnp 10001
-    
-The file node will start listening to http requests at address '127.0.0.1', port 10002. If the port number is omitted the system will assign the file server a random port number in the range (10002, 11001). The file node will register itself on the name node at address '127.0.0.1', port 10001. If the name node address and port number parameters are omitted the system will use default values '127.0.0.1' and 10001.
-
-#### Sending a request
-
-After name node has been started it can be communicated with. To send a simple GET request, using a web browser navigate to:
-
-    http://localhost:10002/
-    
-#### Stopping the node
-
-You may stop program execution at any time by typing Ctrl+C.
-
+#### What kind of applications can benefit from this architectural flavor?
 
