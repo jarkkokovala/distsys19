@@ -1,4 +1,32 @@
 
+# Intallation and execution
+
+## Installing the dfs
+
+Cd to the directory where you want to clone the repository:
+
+$ cd <path-to-the-directory>
+
+Clone the repository:
+
+$ git clone https://github.com/jarkkokovala/distsys19.git
+
+Cd to program's main directory:
+
+$ cd project1/application
+
+Create an Anaconda environment for the application:
+
+$ conda create -n <env-name> python=3.6
+
+Activate the environment
+
+$ source activate <env-name>     
+
+Install libraries library1 and library2:      DO WE NEED TO INSTALL LIBRARIES???
+
+$ conda install -c conda-forge library1, library2
+
 ## Running the dfs
 
 ### Starting the name node
