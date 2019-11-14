@@ -39,9 +39,9 @@
 
 ##### Communication
 
-~~| Node from | | Node to | |
-| --- | --- | --- | --- |
-| Name node | HTTP POST | File node | Tell the file node to replicate certain file to a certain other node (for fault tolerance). |~~
+| Node from | | Node to | | |
+| --- | --- | --- | --- | --- |
+| Name node | --> | File node | HTTP POST | Tell the file node to replicate certain file to a certain other node. Do not wait for response. For fault tolerance when a file node has failed. |
 
 #### File Node
 
