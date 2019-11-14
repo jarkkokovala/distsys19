@@ -18,5 +18,5 @@ Project’s purpose and core functionality
 
 Lessons learned
 
-* Python is fun
+* Python is a joy
 
