@@ -1,4 +1,4 @@
-### Project 1, A distributed system
+Project 1, A distributed system
 
 # Report
 
