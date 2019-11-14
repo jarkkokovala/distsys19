@@ -3,9 +3,9 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 # Report
 
-## Project Description
+## Project Description (the project’s purpose and core functionality)
 
-Project’s purpose and core functionality
+
 
 ## Documentation
 
@@ -16,7 +16,10 @@ Project’s purpose and core functionality
 
 ## Problems encountered, and lessons learned
 
+Problems encountered
+
+*
+
 Lessons learned
 
-* Python is a joy
-
+* 
