@@ -14,10 +14,10 @@ Jarkko Kovala, Eeva-Maria Laiho, Paavo Hemmo
     - ~~tiedostoluettelon lähetys nimipalvelusolmulle, 
     - tiedostojen replikointi (riittää varmaan, että replikoidaan yhdelle sisarsolmulle)
 - nimipalvelisolmu
-    - tiedostosolmun rekisteröiminen, 
-    - solmun kaatumisen havaitseminen (heartbeat), 
-    - tiedostoluettelon hallinta, 
-    - clientin pyyntöihin vastaaminen
+    - ~~tiedostosolmun rekisteröiminen, 
+    - ~~solmun kaatumisen havaitseminen (heartbeat), 
+    - ~~tiedostoluettelon hallinta, 
+    - clientin pyyntöihin vastaaminen: Paavo
 - clientin toteutus: Paavo
 - videodemo. 
 
