@@ -1,9 +1,9 @@
-# Specification
+# System design
+
+## Logical components
 
 ![System overview](./diagram1.png)
 <!--https://www.lucidchart.com/documents/edit/c57d43b0-ede6-4ecb-a284-c0ca66047a74-->
-
-## Logical Components
 
 ### Client
 
