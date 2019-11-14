@@ -9,10 +9,16 @@ Jarkko Kovala, Eeva-Maria Laiho, Paavo Hemmo
 
 ## Mitä (ainakin) puuttuu:
 
-- tiedostosolmu: tiedoston tallennus levylle, tiedostoluettelon lähetys nimipalvelusolmulle, tiedostojen replikointi (riittää varmaan, että replikoidaan yhdelle sisarsolmulle)
-- nimipalvelisolmu: tiedostosolmun rekisteröiminen, solmun kaatumisen havaitseminen (heartbeat), tiedostoluettelon hallinta, clientin pyyntöihin vastaaminen
-- clientin toteutus (mielestäni ei aivan välttämätön, sillä toiminnallisuutta voidaan demota myös selaimella)
-- dokumentaation päivitys ja 
+- tiedostosolmu: 
+    - tiedoston tallennus levylle, 
+    - tiedostoluettelon lähetys nimipalvelusolmulle, 
+    - tiedostojen replikointi (riittää varmaan, että replikoidaan yhdelle sisarsolmulle)
+- nimipalvelisolmu
+    - tiedostosolmun rekisteröiminen, 
+    - solmun kaatumisen havaitseminen (heartbeat), 
+    - tiedostoluettelon hallinta, 
+    - clientin pyyntöihin vastaaminen
+- clientin toteutus: Paavo
 - videodemo. 
 
 ### Report: 
