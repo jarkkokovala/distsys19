@@ -16,5 +16,7 @@ Project’s purpose and core functionality
 
 ## Problems encountered, and lessons learned
 
+Lessons learned
 
+* Python is fun
 
