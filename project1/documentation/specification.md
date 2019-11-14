@@ -2,20 +2,18 @@
 
 ## Architecture
 
-## Processes
-
-### Logical components
+## Processes / logical components
 
 ![System overview](./diagram1.png)
 <!--https://www.lucidchart.com/documents/edit/c57d43b0-ede6-4ecb-a284-c0ca66047a74-->
 
-#### Client
+### Client
 
 * Client software
 * Provides access to the distributed file system. 
 * There can be many.
 
-##### Communication
+#### Communication
 
 | Node from | | Node to | | |
 | --- | --- | --- | --- | --- |
@@ -23,7 +21,7 @@
 | Client | <--> | File node | HTTP PUT | Store file on file node. Wait for reponse. File node responses when message is received. Not when file is stored. |
 | Client | <--> | File node | HTTP GET |  Read file from file node. Wait for reponse. File node responses with the file. |
 
-#### Name Node
+### Name Node
 
 * Master node
 * Single point of failure
@@ -37,13 +35,13 @@
     * File nodes register themselves on the name node when they are started
     * File nodes send heartbeats to the name node
 
-##### Communication
+#### Communication
 
 | Node from | | Node to | | |
 | --- | --- | --- | --- | --- |
 | Name node | --> | File node | HTTP POST | Tell the file node to replicate certain file to a certain other node. Do not wait for response. For fault tolerance when a file node has failed. |
 
-#### File Node
+### File Node
 
 * Worker node
 * There can be many
@@ -51,7 +49,7 @@
 * Handles storing the actual files
 
 
-##### Communication
+#### Communication
 
 | Node from | | Node to | | |
 | --- | --- | --- | --- | --- |
@@ -62,9 +60,9 @@
 
 ## Communication
 
-The messages sent between system components are described in the Processes section.
+The messages sent between system components are described above in the Processes section.
 
-A communication sequence for storing a file is decribed in the following picture.
+A communication sequence for storing a single file is decribed in the following picture.
 
 ![Sequence diagram for storing a file](./sequence1.png)
 <!--https://www.lucidchart.com/documents/edit/66b3bccc-280f-48a8-b0be-1ba4f7274a9b-->
