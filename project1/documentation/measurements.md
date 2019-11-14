@@ -1,6 +1,6 @@
-Jarkko Kovala, Eeva-Maria Laiho, Paavo Hemmo
 
 ### Project 1, a distributed system
+Jarkko Kovala, Eeva-Maria Laiho, Paavo Hemmo
 
 
 # Measurements
