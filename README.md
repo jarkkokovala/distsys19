@@ -3,7 +3,7 @@ Distributed systems harjoitusryhmä
 
 ## Group
 
-Jarkko Kovala, Eeva-Maria Laiho, Paavo Hemmo
+Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 ## Tasks
 
