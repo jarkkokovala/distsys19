@@ -69,9 +69,9 @@ Our dfs client's communication with the dfs system follows client-server model. 
 
 ## Communication
 
-Communication between our dfs client and nodes (name node, file nodes) as well as between the nodes is handled via HTTP protocol. HTTP protocol was selected primarily for ease of implementation with python programmin language. In a real distributed file system a protocol other than HTTP would be more suitable at least for short, frequent messages sent between the nodes like the heartbeat message. 
+Communication between our dfs client and the actual dfs system (name node, file nodes) as well as between the nodes is handled via HTTP protocol. HTTP protocol was selected primarily for ease of implementation with python programming language. In a real distributed file system a protocol other than HTTP would be more suitable at least for short, frequent messages sent between the nodes for example the heartbeat message. 
 
-The messages sent between system components are described above in the processes section so that under each component a table of messages sent from the componenent are listed. The tables are a description of our implementation, not a comprehensive list of all messages sent in a fully functioning distributed file system. 
+The messages sent between system components are described above in the processes section so that under each component a table lists messages sent from that particular componenent to some other component. The arrow column indicates weather a response message is (logically) expected '-->' denotes a one-way message (async) and '<-->' a two-way message (sync). The response messages are not separately listed. Since we're using HTTP (TCP) for all communication the responses are of course always sent (and by default waited). To mitigate this we define a tiny time-out on the sending side. The tables are a description of our implementation, not a comprehensive list of all messages sent in a fully functioning distributed file system. 
 
 An example of a communication sequence for storing a single file on the file system is decribed in the following picture.
 
