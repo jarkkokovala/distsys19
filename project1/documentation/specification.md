@@ -5,6 +5,10 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 ## Architecture
 
+The actual dfs sytem (name node and file nodes) implement a resource-centered architecture where the name node is the central resource. 
+
+Dfs client's communication with the dfs system follows client-server model. The carry out one task (store/read a file) the client instantiates two separate connections to the dfs in a sequence. First to the name node (to request file node ip address and port number) and then teh given file node. 
+
 FILL IN HERE
 
 ## Processes / logical components
