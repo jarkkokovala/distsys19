@@ -62,8 +62,8 @@ Our dfs client's communication with the dfs system follows client-server model. 
 
 | Node from | | Node to | | |
 | --- | --- | --- | --- | --- |
-| File node | --> | Name node | HTTP POST | Register file node on name node. Do not wait or response. |
-| File node | --> | Name node | HTTP POST | Send file list to name node. Do not wait or response. |
+| File node | <--> | Name node | HTTP POST | Register file node on name node. Do not wait or response. |
+| File node | --> | Name node | HTTP POST | Send file list to name node. Wait or response. |
 | File node | --> | Name node | HTTP POST | Send heartbeat to name node. Do not wait or response. |
 | File node | --> | File node (replica) | HTTP POST | Send file for replication to another file node. Do not wait or response. |
 
