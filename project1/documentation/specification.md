@@ -51,8 +51,10 @@ FILL IN HERE
 * Worker node
 * There can be many
 * Registers itself on the name node when started
-* Handles storing the actual files
-
+* After registering sends heartbeat to name node
+* Listens to requests from client (store, read a file) and other file nodes (replicate)
+* Handles storing and reading files from the file system
+* Sends file list updates to name node
 
 #### Communication
 
@@ -65,11 +67,11 @@ FILL IN HERE
 
 ## Communication
 
-Communication between dfs client and nodes (name node, file nodes) as well as between nodes is handled via HTTP protocol. HTTP protocol was selected primarily for ease of implementation with python programmin language. In a real distributed file system a protocol other HTTP would be more suitable at least for short messages sent between the nodes like the heartbeat message sent from file nodes to the name node. 
+Communication between our dfs client and nodes (name node, file nodes) as well as between the nodes is handled via HTTP protocol. HTTP protocol was selected primarily for ease of implementation with python programmin language. In a real distributed file system a protocol other than HTTP would be more suitable at least for short, frequent messages sent between the nodes like the heartbeat message. 
 
-The messages sent between client and nodes are described above in the processes section so that under each component a table of messages sent from the componenent are presented. The lists are not comprehensive list of all messages sent in a fully functioning distributed file system but a description of project state. 
+The messages sent between system components are described above in the processes section so that under each component a table of messages sent from the componenent are listed. The tables are a description of our implementation, not a comprehensive list of all messages sent in a fully functioning distributed file system. 
 
-An example communication sequence for storing a single file on the file system is decribed in the following picture.
+An example of a communication sequence for storing a single file on the file system is decribed in the following picture.
 
 ![Sequence diagram for storing a file](./sequence1.png)
 <!--https://www.lucidchart.com/documents/edit/66b3bccc-280f-48a8-b0be-1ba4f7274a9b-->
