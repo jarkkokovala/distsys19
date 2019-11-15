@@ -1,10 +1,10 @@
 import argparse
 import random
 import sys
-
+import utility
 from nameNode import NameNode
 from fileNode import FileNode
-import utility
+
 
 logger = utility.logger.get_logger('dfs')
 
@@ -20,8 +20,9 @@ def parse_args():
     parser.add_argument("-r", "--fileSystemRoot", help="File system root")
     parser.add_argument("-nni", "--nameNodeIpAddress", default="127.0.0.1", help="Name node ip address")
     parser.add_argument("-nnp", "--nameNodePort", default=10001, type=int, help="Name node port number")
+    parser.add_argument("-in", "--instrumentation", default=False, type=bool, help="Set True to start with instrumentation")
     args = parser.parse_args()
-    return args.nodeType, args.ipAddress, args.port, args.nameNodeIpAddress, args.nameNodePort, args.fileSystemRoot
+    return args.nodeType, args.ipAddress, args.port, args.nameNodeIpAddress, args.nameNodePort, args.fileSystemRoot, args.instrumentation
 
 
 def get_port():
@@ -33,7 +34,7 @@ def get_port():
 
 
 if __name__ == '__main__':
-    node_type, ip_address, port, name_node_ip_address, name_node_port, file_system_root = parse_args()
+    node_type, ip_address, port, name_node_ip_address, name_node_port, file_system_root, instrumentation_enabled = parse_args()
     try:
         if node_type == "nameNode":
             logger.info('Starting the Name Node')

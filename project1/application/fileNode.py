@@ -175,7 +175,23 @@ class FileNode:
             pass
         self.logger.info('File list sent')
 
-    def replicate_file(self, file_name, file_content, file_mtime, instrumentation_id=''):
+    def replicate_file(self, address, file_name, file_content, file_mtime, instrumentation_id=''):
+        # Get replicate node address from name node
+        url = 'http://%s:%i/replicanodes' % self.name_node_address
+        params = {
+            'ip_address': self.address[0],
+            'port': self.address[1]}
+
+        # Replicate
+        url = 'http://%s:%i/heartbeat' % self.name_node_address
+        params = {
+            'ip_address': self.address[0],
+            'port': self.address[1]}
+        try:
+            # We don't want to wait for the response so we time-out quick
+            requests.get(url=url, params=params, timeout=0.0000000001)
+        except requests.exceptions.ReadTimeout:
+            pass
         pass
 
 
