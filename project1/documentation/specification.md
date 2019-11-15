@@ -7,7 +7,7 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 Our actual dfs system (name node, multiple file nodes) implements a resource-centered (master-worker) architecture where the name node is the central resource (master). The name node's responsibility is to manage the dfs system: keep track of nodes and files in the system, respond to file locaiton queries, detect and react to node failures. The file nodes' (worker) task is to efficiently and reliably store and serve files.
 
-Our dfs client's communication with the dfs system follows client-server model. To carry out one task (store/read a file) the client instantiates two separate connections to the dfs in a sequence. First to the name node (to query file node ip address and port number) and then the given file node. 
+Our dfs client's communication with the dfs system follows client-server model. To carry out one task (store/read a file) the client instantiates two separate connections to the dfs system in a sequence. First to the name node (to query file node ip address and port number) and then the given file node. 
 
 ## Processes / logical components
 
