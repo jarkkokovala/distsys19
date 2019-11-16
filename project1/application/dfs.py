@@ -5,7 +5,7 @@ import utility
 from nameNode import NameNode
 from fileNode import FileNode
 
-
+HEARTBEAT_INTERVAL = 5 # seconds
 logger = utility.logger.get_logger('dfs')
 
 def parse_args():

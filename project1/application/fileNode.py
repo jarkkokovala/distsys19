@@ -11,7 +11,8 @@ import utility.logger
 
 
 class FileNode:
-    HEARTBEAT_INTERVAL = 5 # seconds
+    HEARTBEAT_INTERVAL = 5 # sec
+    NETWORK_LATENCY = 100 # msec
 
     def __init__(self, ip_address, port, name_node_ip_address, name_node_port, file_system_root):
         """
@@ -28,6 +29,9 @@ class FileNode:
         self.name_node_address = (name_node_ip_address, name_node_port)
         self.file_system_root = file_system_root
         self.logger = utility.logger.get_logger('FileNode %s:%i' % self.address)
+        sync_timeout = (100+FileNode.NETWORK_LATENCY)/1000
+        self.sync_timeouts = (sync_timeout,sync_timeout)  # (Connection timeout, read timeout)
+        self.async_timeouts = (sync_timeout, 0.000001)  # (Connection timeout, read timeout)
         if not os.path.exists(self.file_system_root):
             os.makedirs(self.file_system_root)
 
@@ -85,12 +89,18 @@ class FileNode:
         params = {
             'ip_address': self.address[0],
             'port': self.address[1]}
+        response = None
         try:
-            response = requests.get(url=url, params=params)
-        except socket.error as e:
+            try:
+                response = requests.get(url=url, params=params, timeout=self.sync_timeouts)
+            except (requests.exceptions.ConnectTimeout, requests.exceptions.ReadTimeout):
+                self.logger.info('Connect timeout, increase time and retry')
+                timeouts = tuple([x*2 for x in self.sync_timeouts])
+                requests.get(url=url, params=params, timeout=timeouts) # 500 msec
+        except (requests.exceptions.ConnectTimeout, requests.exceptions.ReadTimeout) as ex:
             self.logger.info('Error in registering on name node %s:%i' % self.name_node_address)
-            raise OSError("Error in registering on name node %s:%i" % self.name_node_address) from e
-        self.logger.info('Registering done. Name node responded with %s' % str(response))
+            raise OSError("Error in registering on name node %s:%i" % self.name_node_address) from ex
+        self.logger.info('Registering done. Name node responded with %s' % str(response or ''))
 
     def run_httpserver(self):
         """
@@ -116,8 +126,12 @@ class FileNode:
             'ip_address': self.address[0],
             'port': self.address[1]}
         try:
-            # We don't want to wait for the response so we time-out quick
-            requests.get(url=url, params=params, timeout=0.0000000001)
+            try:
+                requests.get(url=url, params=params, timeout=self.async_timeouts)
+            except requests.exceptions.ConnectTimeout:
+                self.logger.info('Connect timeout, increase time and retry')
+                timeouts = tuple([x*2 for x in self.async_timeouts])
+                requests.get(url=url, params=params, timeout=timeouts) # 500 msec
         except requests.exceptions.ReadTimeout:
             pass
         self.logger.info('Heartbeat sent')
@@ -169,8 +183,12 @@ class FileNode:
             'instrumentation_id': instrumentation_id
         }
         try:
-            # We just want to send the request and not wait for the response => time-out quick
-            requests.post(url=url, json=data, timeout=0.0000000001)
+            try:
+                requests.get(url=url, json=data, timeout=self.async_timeouts)
+            except requests.exceptions.ConnectTimeout:
+                self.logger.info('Connect timeout, increase time and retry')
+                timeouts = tuple([x*2 for x in self.async_timeouts])
+                requests.get(url=url, json=data, timeout=timeouts) # 500 msec
         except requests.exceptions.ReadTimeout:
             pass
         self.logger.info('File list sent')
@@ -182,17 +200,19 @@ class FileNode:
             'ip_address': self.address[0],
             'port': self.address[1]}
 
-        # Replicate
-        url = 'http://%s:%i/heartbeat' % self.name_node_address
-        params = {
-            'ip_address': self.address[0],
-            'port': self.address[1]}
+        # TODO: Send the replicate request(s)
         try:
-            # We don't want to wait for the response so we time-out quick
-            requests.get(url=url, params=params, timeout=0.0000000001)
+            try:
+
+                response = requests.get(url=url, params=params, timeout=self.sync_timeouts)
+                print(response)
+
+            except requests.exceptions.ConnectTimeout:
+                self.logger.info('Connect timeout, increase time and retry')
+                timeouts = tuple([x*2 for x in self.async_timeouts])
+                requests.get(url=url, params=params, timeout=timeouts) # 500 msec
         except requests.exceptions.ReadTimeout:
             pass
-        pass
 
 
 class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):

@@ -148,8 +148,9 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
         url = urlparse(self.path)
         query = parse_qs(url.query)
         instrumentation_id = self.headers.get('Instrumentation-Id')
-        #print(self.headers)
         response_code = 200
+
+        #print(url, query, instrumentation_id)
 
         address = None
         if "ip_address" in query and "port" in query:
@@ -178,9 +179,9 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
                 response_code = 400
         elif url.path == "/replicanodes":
             if address:
+                # TODO: Return replica fileNodes' addresses to primary fileNode
                 replica_nodes = self.server.node.get_replica_fileNodes(address, instrumentation_id)
                 if replica_nodes:
-                    # TODO: Return replica fileNodes' addresses to primary fileNode
                     print(replica_nodes)
                 else:
                     response_code = 400
