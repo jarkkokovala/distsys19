@@ -5,7 +5,7 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 # Measurements
 
-Network latency can be emulated with the [NetEm](https://wiki.linuxfoundation.org/networking/netem) tool. On Ubuntu the tool is pre-installed. To introduce 100msec latency on all traffic (including local HTTP) command:
+Network latency can be emulated with the [NetEm](https://wiki.linuxfoundation.org/networking/netem) tool. On Ubuntu the tool is pre-installed. To introduce 100msec latency on all network traffic (including local HTTP) command:
 
 ``` $ tc qdisc add dev lo root handle 1:0 netem delay 100msec ```
 
