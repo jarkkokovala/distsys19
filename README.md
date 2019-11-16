@@ -27,7 +27,7 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 1) A thorough final report about the project’s purpose and core functionality; 
 2) your system design using the 3 principles from the lectures (architecture, processes, communication), 
 3) problems encountered, and lessons learned: Jarkko, Eeva-Maria, Paavo
-4) Instructions for installation and execution: Eeva-Maria
+4) Instructions for installation and execution: Jarkko, Eeva-Maria, Paavo
 5) Answer the following questions with your implementation: 
     - What is the average time for sending 50 messages between two nodes (random payload)? 
     - Choose 3 different fixed message sizes (payloads for min, average, max), what is the average time when sending 25 in each case? 
