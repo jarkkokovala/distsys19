@@ -81,4 +81,15 @@ After name node has been started it can be communicated with. To send a simple G
 
 You may stop program execution at any time by typing Ctrl+C.
 
+### Starting a client
+
+Cd to the program's main directory:
+
+    $ cd <path-to-download-directory>/project1/application
+
+Start the file node:
+
+    $ python3 dfs.py -t client -nni '127.0.0.1' -nnp 10001
+
+If the port number is omitted, the system will assing the default port number 10003 for the client.
 
