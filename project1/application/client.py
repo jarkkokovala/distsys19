@@ -32,8 +32,6 @@ class Client:
           rjson = response.json()
           file_node = (rjson['ip_address'], rjson['port'])
           return file_node
-        else:
-          print("No filenodes available")
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:
@@ -91,7 +89,6 @@ class Client:
     fileName = self.ask_file_name()
     content = self.get_file(fileName)
     file_node = self.request_a_filenode()
-    print("FileNode:", file_node)
     res = self.send_file_to_filenode(file_node, fileName, content)
     if res == 200:
       print("\nSUCCESSFULLY SAVED FILE %s\n" % fileName)
@@ -102,13 +99,16 @@ class Client:
   def fetch_file(self):
     fileName = self.ask_file_name()
     file_node = self.request_a_filenode(fileName)
-    file = self.request_file_from_filenode(fileName, file_node)
-    if file:
-      print("\n*********************** %s ***********************\n" % fileName)
-      print(file)
-      print("\n********************************************************\n")
+    if file_node:
+      file = self.request_file_from_filenode(fileName, file_node)
+      if file:
+        print("\n*********************** %s ***********************\n" % fileName)
+        print(file)
+        print("\n********************************************************\n")
+      else:
+        print("\nCOULD NOT READ FILE %s\n" % fileName)
     else:
-      print("\nCOULD NOT READ FILE %s\n" % fileName)
+      print("\nFILE %s DOES NOT EXIST\n" % fileName)
     self.start_ui()
   
   def start_ui(self):
