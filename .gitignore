@@ -3,3 +3,7 @@ dfsroot/
 
 # Project 1 instrumentation root
 dfslog/
+
+# Jupyter notebook cach
+.ipynb_checkpoints/
+

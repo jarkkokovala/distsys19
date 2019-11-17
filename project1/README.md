@@ -1,55 +1,27 @@
-# Project 1
+### Project 1, a distributed system
+Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
-## Running the dfs
+# Report
 
-### Starting the name node
+## Project Description (the project’s purpose and core functionality)
 
-Cd to the program's main directory:
+For the project 1 we decided to implement a distributed file system (DFS). A DFS is a system of multiple (hundreds, even thousands) nodes which are connected via a network. It's designed to store and manage a huge amount of files in a reliable, availale and fault-tolerant manner. A typical DFS implementation follows a master-worker architecture where a single master node manages a large set of worker nodes.
 
-    $ cd <path-to-download-directory>/project1/application
-    
-You will need to install requests module:
+Our DFS implements of course only a tiny subset of the features of a real DFS and is more of a proof of concept than a working implementation. We implemented only the core components of a typical distributed file system: name node (master), file node (worker) and client application to connect to the dfs and basic communication between the components. Due to time constraints on the project we chose to focus on the task of reliably storing a file on the distributed file system.
 
-```
-pip install requests
-```
+## Documentation
 
-Start the name node:
-
-    $ python3 dfs.py
-
-The name node will start listening to http requests at default address '127.0.0.1', port 10001. Non-default ip address and port number can be defined by passing parameters $-i$ (ip address) and $-p$ (port number).
-
-#### Sending a request
-
-After name node has been started it can be communicated with. To send a simple GET request, using a web browser navigate to:
-
-    http://localhost:10001/
-
-#### Stopping the node
-
-You may stop program execution at any time by typing Ctrl+C.
-
-### Starting a file node
-
-Cd to the program's main directory:
-
-    $ cd <path-to-download-directory>/project1/application
-
-Start the file node:
-
-    $ python3 dfs.py -t fileNode -p 10002 -nni '127.0.0.1' -nnp 10001
-    
-The file node will start listening to http requests at address '127.0.0.1', port 10002. If the port number is omitted the system will assign the file server a random port number in the range (10002, 11001). The file node will register itself on the name node at address '127.0.0.1', port 10001. If the name node address and port number parameters are omitted the system will use default values '127.0.0.1' and 10001.
-
-#### Sending a request
-
-After name node has been started it can be communicated with. To send a simple GET request, using a web browser navigate to:
-
-    http://localhost:10002/
-    
-#### Stopping the node
-
-You may stop program execution at any time by typing Ctrl+C.
+* [System design](./documentation/specification.md)
+* [Installation and execution guide](./documentation/installation.md)
+* [Measurements](./documentation/measurements.md)
 
 
+## Problems encountered, and lessons learned
+
+Problems encountered
+
+*
+
+Lessons learned
+
+* 

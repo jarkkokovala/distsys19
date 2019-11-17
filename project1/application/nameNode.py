@@ -1,12 +1,14 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import utility.logger
-import time
-from urllib.parse import urlparse, parse_qs, unquote
+import inspect
 import json
+import utility.logger
+import sys
 import threading
 import random
+import time
+
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from random import shuffle
-import sys
+from urllib.parse import urlparse, parse_qs, unquote
 from utility.instrumentation import instrumentation
 import requests
 
@@ -57,8 +59,8 @@ class NameNode:
         :param addressFilter: address to filter as a tuple of (ip_address, port_number)
         :return: a fileNode with the file of name file_name or a random fileNode
         """
-        instrumentation.warning("%s;%s;%s" % ("NameNode", "get_fileNode", instrumentation_id))
         ret = None
+        instrumentation.warning("%s;%s;%s" % (self.__class__.__name__, inspect.currentframe().f_code.co_name, instrumentation_id))
         with self.fileNodes_lock:
             if len(self.fileNodes) > 0:
                 if file_name:
@@ -82,7 +84,7 @@ class NameNode:
         :param addressFilter: address to filter from the list as a tuple of (ip_address, port_number)
         :return: First NameNode.REPLICA_N fileNodes in random order
         """
-        instrumentation.warning("%s;%s;%s" % ("NameNode", "get_replica_fileNodes", instrumentation_id))
+        instrumentation.warning("%s;%s;%s" % (self.__class__.__name__, inspect.currentframe().f_code.co_name, instrumentation_id))
         with self.fileNodes_lock:
             ret = self.fileNodes
         return [x for x in shuffle(ret) if not x == filter_address][:NameNode.REPLICA_N]
@@ -108,7 +110,7 @@ class NameNode:
         self.logger.info('Updating filelist for %s port %i, %i files', addrport[0], addrport[1], len(files))
         with self.fileNodes_lock:
             self.fileNodes[addrport]["files"] = files
-        instrumentation.warning("%s;%s;%s" % ("NameNode", "update_filelist", instrumentation_id))
+        instrumentation.warning("%s;%s;%s" % (self.__class__.__name__, inspect.currentframe().f_code.co_name, instrumentation_id))
 
     def run(self):
         """
@@ -161,8 +163,9 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
         url = urlparse(self.path)
         query = parse_qs(url.query)
         instrumentation_id = self.headers.get('Instrumentation-Id')
-        #print(self.headers)
         response_code = 200
+
+        #print(url, query, instrumentation_id)
 
         address = None
         if "ip_address" in query and "port" in query:
@@ -201,9 +204,9 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
                 response_code = 400
         elif url.path == "/replicanodes":
             if address:
+                # TODO: Return replica fileNodes' addresses to primary fileNode
                 replica_nodes = self.server.node.get_replica_fileNodes(address, instrumentation_id)
                 if replica_nodes:
-                    # TODO: Return replica fileNodes' addresses to primary fileNode
                     print(replica_nodes)
                 else:
                     response_code = 400
