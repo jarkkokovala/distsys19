@@ -4,9 +4,11 @@ import time
 from urllib.parse import urlparse, parse_qs, unquote
 import json
 import threading
+import random
 from random import shuffle
 import sys
 from utility.instrumentation import instrumentation
+import requests
 
 
 class NameNode:
@@ -49,15 +51,28 @@ class NameNode:
         return ret
 
     def get_fileNode(self, file_name='',  instrumentation_id=''):
+        # If file_name is left empty (or None), just return a random fileNode
         """
         Return a fileNode's address and port
         :param addressFilter: address to filter as a tuple of (ip_address, port_number)
         :return: a fileNode with the file of name file_name or a random fileNode
         """
         instrumentation.warning("%s;%s;%s" % ("NameNode", "get_fileNode", instrumentation_id))
+        ret = None
         with self.fileNodes_lock:
-            # TODO: Select the correct fileNode
-            ret = list(self.fileNodes.keys())[0]
+            if len(self.fileNodes) > 0:
+                if file_name:
+                    # Select the filenode which contains the file
+                    for i in range(len(list(self.fileNodes.keys()))):
+                        key = list(self.fileNodes.keys())[i]
+                        if file_name in self.fileNodes[key]['files']:
+                            ret = key
+                            break
+                else:
+                    # Select a random fileNode
+                    ret = list(self.fileNodes.keys())[random.randint(0, len(list(self.fileNodes.keys())) - 1)]
+            else:
+                ret = None
         print(ret)
         return ret
 
@@ -172,6 +187,16 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
             if file_node:
                 # TODO: Return fileNode address to client
                 print(file_node)
+                data = {
+                    'ip_address': file_node[0],
+                    'port': file_node[1]
+                }
+                self.send_response(200)
+                self.send_header("Content-type", 'application/json; charset=utf-8')
+                message = json.dumps(data).encode()
+                self.send_header("Content-length", len(message))
+                self.end_headers()
+                self.wfile.write(message)
             else:
                 response_code = 400
         elif url.path == "/replicanodes":

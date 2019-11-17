@@ -4,6 +4,7 @@ import sys
 
 from nameNode import NameNode
 from fileNode import FileNode
+from client import Client
 import utility
 
 logger = utility.logger.get_logger('dfs')
@@ -57,6 +58,11 @@ if __name__ == '__main__':
                         print(str(e))
             if i >= 9:
                 logger.info('Unable to start the file node. The port number space may be congested.')
+        elif node_type == "client":
+            logger.info('Starting client')
+            # Maybe just add port 10003 to client. Then change the range of the random port for fileNodes
+            node = Client(ip_address, (port or 10003), name_node_ip_address, name_node_port)
+            node.run()
     except KeyboardInterrupt as ex:
         logger.info('A keyboard interrupt was detected')
     except:
