@@ -14,6 +14,8 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
     * Choose 3 different fixed message sizes (payloads for min, average, max), what is the average time when sending 25 in each case?
     * Choose a unique payload, e.g., average size, and then measure the inter arrival rate between messages?
 
-
 - How reliable is your architecture? (Measurements): Jarkko
+
 - What kind of applications can benefit from this architectural flavor?  (Measurements): Jarkko
+
+- Video: Jarkko
