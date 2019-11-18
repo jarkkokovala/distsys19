@@ -151,7 +151,7 @@ class FileNode:
 
         # Store the file on disk
         with open(os.path.join(self.file_system_root, file_name), "wb") as f:
-            f.write(file_content)
+            f.write(file_content.encode())
             f.close()
             os.utime(os.path.join(self.file_system_root, file_name), (time.time(), file_mtime))
 
@@ -161,6 +161,26 @@ class FileNode:
         # Replicate the file to N sibling nodes
         self.replicate_file(file_name, file_content, file_mtime, instrumentation_id)
     
+    def store_replica(self, file_name, file_content, file_mtime, instrumentation_id=''):
+        """
+        Store a replica of file on disk
+        :param file_name: Name of the file
+        :param file_content: Content of the file
+        :param file_mtime: Last modification time for the file
+        :param instrumentation_id: Internal id for measuring system performance
+        :return:
+        """
+        self.logger.info('Storing replica of file `%s` on disk' % file_name)
+
+        # Store the file on disk
+        with open(os.path.join(self.file_system_root, file_name), "wb") as f:
+            f.write(file_content)
+            f.close()
+            os.utime(os.path.join(self.file_system_root, file_name), (time.time(), file_mtime))
+
+        # Send file list to name node
+        self.send_filelist(instrumentation_id)
+
     def read_file(self, file_name):
         self.logger.info('Reading file `%s` from disk' % file_name)
         with open(os.path.join(self.file_system_root, file_name), "r") as f:
@@ -209,47 +229,40 @@ class FileNode:
         #    pass
         self.logger.info('File list sent')
     
-    def replicate_file(self, address, file_name, file_content, file_mtime, instrumentation_id=''):
-        # Get replicate node address from name node
+    def replicate_file(self, file_name, file_content, file_mtime, instrumentation_id=''):
+        """
+        Replicate a file by requesting replica hosts from nameNode and then storing a copy on each
+        """
+
         url = 'http://%s:%i/replicanodes' % self.name_node_address
         params = {
             'ip_address': self.address[0],
             'port': self.address[1]}
 
-        # Replicate
-        url = 'http://%s:%i/heartbeat' % self.name_node_address
-        params = {
-            'ip_address': self.address[0],
-            'port': self.address[1]}
         try:
-            # We don't want to wait for the response so we time-out quick
-            requests.get(url=url, params=params, timeout=0.0000000001)
+            self.logger.info("Requesting replicas for file")
+
+            response = requests.get(url=url, params=params)
+
+            if response.status_code == 200:
+                replicaNodes = response.json()
+
+                # Save a copy to all the replica nodes
+                for replicaNode in replicaNodes:
+                    url = 'http://%s:%i/newreplica' % tuple(replicaNode)
+
+                    jsondata = json.dumps({'content': file_content}).encode()
+                    headers = {
+                        'Content-Length': bytes(len(jsondata)),
+                        'File-Name': file_name,
+                        'File-Modification-Time': str(file_mtime),
+                        'Instrumentation-Id': instrumentation_id
+                    }
+
+                    requests.put(url=url, data=jsondata, headers=headers)
         except requests.exceptions.ReadTimeout:
             pass
-        pass
     
-    # TODO: Code below does not work
-    #def replicate_file(self, address, file_name, file_content, file_mtime, instrumentation_id=''):
-        # Get replicate node address from name node
-    #    url = 'http://%s:%i/replicanodes' % self.name_node_address
-    #    params = {
-    #        'ip_address': self.address[0],
-    #        'port': self.address[1]}
-
-        # TODO: Send the replicate request(s)
-        #try:
-        #    try:
-
-        #        response = requests.get(url=url, params=params, timeout=self.sync_timeouts)
-        #        print(response)
-
-        #    except requests.exceptions.ConnectTimeout:
-        #        self.logger.info('Connect timeout, increase time and retry')
-        #        timeouts = tuple([x*2 for x in self.async_timeouts])
-        #        requests.get(url=url, params=params, timeout=timeouts) # 500 msec
-        #except requests.exceptions.ReadTimeout:
-        #    pass
-
 
 class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
     def _set_headers(self):
@@ -291,10 +304,9 @@ class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
             content_len = int(self.headers.get('Content-Length', 0))
             file_name = os.path.basename(self.headers.get('File-Name', 0))
             file_mtime = float(self.headers.get('File-Modification-Time', 0))
-            file_content = self.rfile.read(content_len)
             instrumentation_id = self.headers.get('Instrumentation-Id')
 
-            cjson = json.loads(file_content.decode('utf-8'))
+            file_content = json.loads(self.rfile.read(content_len).decode('utf-8'))["content"]
 
             # TODO: This method should be ASYNC so that we can quickly return a response to client
             self.server.node.store_file(file_name, file_content, file_mtime, instrumentation_id)  # <-- Here we call the fileNode
@@ -302,3 +314,20 @@ class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
             # Send response to client
             self._set_headers()
             self.wfile.write(self._message('This is the file node at %s:%i at %s' % (self.server.node.address[0], self.server.node.address[1], datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))))
+        elif query.path == "/newreplica":
+            # Handle the request
+            content_len = int(self.headers.get('Content-Length', 0))
+            file_name = os.path.basename(self.headers.get('File-Name', 0))
+            file_mtime = float(self.headers.get('File-Modification-Time', 0))
+            instrumentation_id = self.headers.get('Instrumentation-Id')
+
+            file_content = json.loads(self.rfile.read(content_len).decode('utf-8'))["content"].encode()
+
+            # TODO: This method should be ASYNC so that we can quickly return a response to client
+            self.server.node.store_replica(file_name, file_content, file_mtime, instrumentation_id)  # <-- Here we call the fileNode
+
+            # Send response to client
+            self._set_headers()
+            self.wfile.write(self._message('This is the file node at %s:%i at %s' % (self.server.node.address[0], self.server.node.address[1], datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))))
+
+

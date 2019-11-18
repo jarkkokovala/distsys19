@@ -85,9 +85,15 @@ class NameNode:
         :return: First NameNode.REPLICA_N fileNodes in random order
         """
         instrumentation.warning("%s;%s;%s" % (self.__class__.__name__, inspect.currentframe().f_code.co_name, instrumentation_id))
+
+        self.logger.info('Sending replicas for %s port %i', filter_address[0], filter_address[1])
+
         with self.fileNodes_lock:
-            ret = self.fileNodes
-        return [x for x in shuffle(ret) if not x == filter_address][:NameNode.REPLICA_N]
+            ret = list(self.fileNodes)
+        
+        shuffle(ret)
+
+        return [x for x in ret if not x == filter_address][:NameNode.REPLICA_N]
 
     def do_heartbeat(self, addrport):
         """
@@ -175,6 +181,8 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
         if "file_name" in query:
             file_name = query["file_name"][0]
 
+        response_body = None
+
         if url.path == "/register": # Register request from filenode
             if address:
                 self.server.node.register_fileNode(address)
@@ -202,12 +210,11 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
                 self.wfile.write(message)
             else:
                 response_code = 400
-        elif url.path == "/replicanodes":
+        elif url.path == "/replicanodes": # Return replica node address(es) for fileNode
             if address:
-                # TODO: Return replica fileNodes' addresses to primary fileNode
                 replica_nodes = self.server.node.get_replica_fileNodes(address, instrumentation_id)
                 if replica_nodes:
-                    print(replica_nodes)
+                    response_body = json.dumps(replica_nodes).encode()
                 else:
                     response_code = 400
             else:
@@ -220,6 +227,9 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
         self._set_headers()
+
+        if response_body:
+            self.wfile.write(response_body)
 
     def do_POST(self):
         query = urlparse(self.path)
