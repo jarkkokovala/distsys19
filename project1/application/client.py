@@ -61,7 +61,7 @@ class Client:
     try:
       response = requests.get(url=url, headers=headers)
       if response.status_code == 200:
-        text = response.json()['content']
+        text = response.text
         return text
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
