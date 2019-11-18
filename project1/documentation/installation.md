@@ -25,10 +25,6 @@ Activate the environment
 
     $ source activate <env-name>     
 
-Install libraries library1 and library2:      DO WE NEED TO INSTALL LIBRARIES???
-
-    $ conda install -c conda-forge library1, library2
-
 ## Running the dfs
 
 ### Starting the name node
