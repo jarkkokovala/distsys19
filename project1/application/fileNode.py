@@ -8,6 +8,8 @@ import threading
 import time
 import pickle
 import utility.logger
+from urllib.parse import urlparse
+import json
 
 
 class FileNode:
@@ -158,6 +160,13 @@ class FileNode:
 
         # Replicate the file to N sibling nodes
         self.replicate_file(file_name, file_content, file_mtime, instrumentation_id)
+    
+    def read_file(self, file_name):
+        self.logger.info('Reading file `%s` from disk' % file_name)
+        with open(os.path.join(self.file_system_root, file_name), "r") as f:
+            content = f.read()
+            f.close()
+        return content
 
     def send_filelist(self, instrumentation_id=''):
         """
@@ -183,16 +192,23 @@ class FileNode:
             'instrumentation_id': instrumentation_id
         }
         try:
-            try:
-                requests.get(url=url, json=data, timeout=self.async_timeouts)
-            except requests.exceptions.ConnectTimeout:
-                self.logger.info('Connect timeout, increase time and retry')
-                timeouts = tuple([x*2 for x in self.async_timeouts])
-                requests.get(url=url, json=data, timeout=timeouts) # 500 msec
+            # We just want to send the request and not wait for the response => time-out quick
+            requests.post(url=url, json=data, timeout=0.0000000001)
         except requests.exceptions.ReadTimeout:
             pass
-        self.logger.info('File list sent')
 
+        # TODO: Code below does not work
+        #try:
+        #    try:
+        #        requests.get(url=url, json=data, timeout=self.async_timeouts)
+        #    except requests.exceptions.ConnectTimeout:
+        #        self.logger.info('Connect timeout, increase time and retry')
+        #        timeouts = tuple([x*2 for x in self.async_timeouts])
+        #        requests.get(url=url, json=data, timeout=timeouts) # 500 msec
+        #except requests.exceptions.ReadTimeout:
+        #    pass
+        self.logger.info('File list sent')
+    
     def replicate_file(self, address, file_name, file_content, file_mtime, instrumentation_id=''):
         # Get replicate node address from name node
         url = 'http://%s:%i/replicanodes' % self.name_node_address
@@ -200,19 +216,39 @@ class FileNode:
             'ip_address': self.address[0],
             'port': self.address[1]}
 
-        # TODO: Send the replicate request(s)
+        # Replicate
+        url = 'http://%s:%i/heartbeat' % self.name_node_address
+        params = {
+            'ip_address': self.address[0],
+            'port': self.address[1]}
         try:
-            try:
-
-                response = requests.get(url=url, params=params, timeout=self.sync_timeouts)
-                print(response)
-
-            except requests.exceptions.ConnectTimeout:
-                self.logger.info('Connect timeout, increase time and retry')
-                timeouts = tuple([x*2 for x in self.async_timeouts])
-                requests.get(url=url, params=params, timeout=timeouts) # 500 msec
+            # We don't want to wait for the response so we time-out quick
+            requests.get(url=url, params=params, timeout=0.0000000001)
         except requests.exceptions.ReadTimeout:
             pass
+        pass
+    
+    # TODO: Code below does not work
+    #def replicate_file(self, address, file_name, file_content, file_mtime, instrumentation_id=''):
+        # Get replicate node address from name node
+    #    url = 'http://%s:%i/replicanodes' % self.name_node_address
+    #    params = {
+    #        'ip_address': self.address[0],
+    #        'port': self.address[1]}
+
+        # TODO: Send the replicate request(s)
+        #try:
+        #    try:
+
+        #        response = requests.get(url=url, params=params, timeout=self.sync_timeouts)
+        #        print(response)
+
+        #    except requests.exceptions.ConnectTimeout:
+        #        self.logger.info('Connect timeout, increase time and retry')
+        #        timeouts = tuple([x*2 for x in self.async_timeouts])
+        #        requests.get(url=url, params=params, timeout=timeouts) # 500 msec
+        #except requests.exceptions.ReadTimeout:
+        #    pass
 
 
 class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -230,8 +266,17 @@ class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
          * Client: GET file
         :return:
         """
-        self._set_headers()
-        self.wfile.write(self._message('This is the file node %s:%i at %s' % (self.server.node.address[0], self.server.node.address[1], datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))))
+        query = urlparse(self.path)
+        if query.path == "/file":
+            file_name = os.path.basename(self.headers.get('File-Name', 0))
+            content = self.server.node.read_file(file_name)
+
+            self.send_response(200)
+            self.send_header("Content-type", 'application/json; charset=utf-8')
+            message = content.encode()
+            self.send_header("Content-length", len(message))
+            self.end_headers()
+            self.wfile.write(message)
 
     def do_PUT(self):
         """
@@ -240,16 +285,20 @@ class FileNodeHTTPRequestHandler(BaseHTTPRequestHandler):
         :return:
         """
 
-        # Handle the request
-        content_len = int(self.headers.get('Content-Length', 0))
-        file_name = os.path.basename(self.headers.get('File-Name', 0))
-        file_mtime = float(self.headers.get('File-Modification-Time', 0))
-        file_content = self.rfile.read(content_len)
-        instrumentation_id = self.headers.get('Instrumentation-Id')
+        query = urlparse(self.path)
+        if query.path == "/newfile":
+            # Handle the request
+            content_len = int(self.headers.get('Content-Length', 0))
+            file_name = os.path.basename(self.headers.get('File-Name', 0))
+            file_mtime = float(self.headers.get('File-Modification-Time', 0))
+            file_content = self.rfile.read(content_len)
+            instrumentation_id = self.headers.get('Instrumentation-Id')
 
-        # TODO: This method should be ASYNC so that we can quickly return a response to client
-        self.server.node.store_file(file_name, file_content, file_mtime, instrumentation_id)  # <-- Here we call the fileNode
+            cjson = json.loads(file_content.decode('utf-8'))
 
-        # Send response to client
-        self._set_headers()
-        self.wfile.write(self._message('This is the file node at %s:%i at %s' % (self.server.node.address[0], self.server.node.address[1], datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))))
+            # TODO: This method should be ASYNC so that we can quickly return a response to client
+            self.server.node.store_file(file_name, file_content, file_mtime, instrumentation_id)  # <-- Here we call the fileNode
+
+            # Send response to client
+            self._set_headers()
+            self.wfile.write(self._message('This is the file node at %s:%i at %s' % (self.server.node.address[0], self.server.node.address[1], datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))))
