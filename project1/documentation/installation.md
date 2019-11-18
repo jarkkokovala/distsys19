@@ -17,14 +17,6 @@ Cd to program's main directory:
 
     $ cd project1/application
 
-Create an Anaconda environment for the application:
-
-    $ conda create -n <env-name> python=3.6
-
-Activate the environment
-
-    $ source activate <env-name>     
-
 ## Running the dfs
 
 ### Starting the name node
