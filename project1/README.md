@@ -17,7 +17,7 @@ Our DFS implements of course only a tiny subset of the features of a real DFS an
 
 * [System design](./documentation/specification.md)
 * [Installation and execution guide](./documentation/installation.md)
-* [Measurements](./documentation/measurements.md)
+* [Measurements, reliability and analysis](./documentation/measurements.md)
 
 
 ## Problems encountered, and lessons learned
