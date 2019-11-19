@@ -32,4 +32,12 @@ To reset command:
 
 ## How reliable is your architecture? 
 
+The architecture is able to achieve very high reliability. The data is replicated to a definable number of nodes, therefore the probability of losing data dependent on this number (probability of losing data = probability of losing a fileNode ^ number of replicas used).
+
+The weak point in the architecture is the nameNode, on which all the other nodes are dependent. Since nameNode does not store persistent data, it doesn't affect the reliability but rather the availability of the system: if the nameNode is down, the data is still there but the system cannot be accessed. Due to simplicity of nameNode's function, it could trivially be replicated to mitigate these problems.
+
 ## What kind of applications can benefit from this architectural flavor?
+
+This architecture could be used by any applications requiring reliable distributed access to data that doesn't change often. Writing data is not efficient due to the need to replicate and due to the nameNode being a bottleneck in this case, but the data could generally be read by an unlimited number of readers in this architecture as you can increase the number of fileNodes and replicas as necessary without limit. 
+
+Distributed data mining (for example, MapReduce) would be an example of an application that would be perfect for this architecture.
