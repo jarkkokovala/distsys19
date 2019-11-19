@@ -20,7 +20,7 @@ Our DFS implements of course only a tiny subset of the features of a real DFS an
 
 Problems encountered
 
-* Nothing major
+* Nothing major (if you don't count fighting with the semantics of the Python libraries used), our initial design worked quite well as originally planned.
 
 Lessons learned
 
