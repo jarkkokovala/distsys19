@@ -3,7 +3,7 @@
 Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 
-# Measurements
+# Measurements and reliability
 
 ## Emulating network latency
 
