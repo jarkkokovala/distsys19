@@ -20,8 +20,10 @@ Our DFS implements of course only a tiny subset of the features of a real DFS an
 
 Problems encountered
 
-*
+* Nothing major
 
 Lessons learned
 
-* 
+* Building distributed systems is tricky. You always get surprising failure scenarios and the complexity increases fast especially when you add parallel functionality, even a single thread in the system. 
+* The system is always easier to build in your mind than in practise
+* Try to things as simple as possible
