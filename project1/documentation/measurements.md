@@ -54,6 +54,26 @@ The average time for the two events:
 
 For this measurement the client sent 50 small (~4 kB, of which top 25 were used), 25 medium (~400 kB) and 25 large (~4 MB) file upload requests to the dfs. 
 
+For this measurement we report total time i.e. the time when the replica file has been stored and is available. 
+
+The average time for the three payloads:
+
+* small: 
+    * mean: 1.814501
+    * std: 0.039680
+    * min: 1.738792
+    * max: 1.923551
+* medium: 
+    * mean: 1.826728
+    * std: 0.038115
+    * min: 1.749864
+    * max: 1.882395
+ * large: 
+    * mean: 5.409429
+    * std: 0.055534
+    * min: 5.314126
+    * max: 5.559336
+
 ### Choose a unique payload, e.g., average size, and then measure the inter arrival rate between messages?
 
 For this measurement the client sent 50 small (~4 kB) file upload requests to the dfs. 
