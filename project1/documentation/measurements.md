@@ -9,15 +9,11 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 Network latency can be emulated with the [NetEm](https://wiki.linuxfoundation.org/networking/netem) tool. On Ubuntu the tool is pre-installed. To introduce mean 100msec latency on all network traffic (including local HTTP) command:
 
-``` $ tc qdisc change dev lo root handle 1:0 netem delay 100ms ```
+``` $ tc qdisc add dev lo root handle 1:0 netem delay 100ms ```
 
-To introduce 10 msec variation and a correlation parameter:
+To introduce random variation sampled from normal distribution with mean 10ms:
 
-``` $ tc qdisc change dev lo root handle 1:0 netem delay 100ms 10ms 25% ```
-
-To introduce random packet loss where 2.5% of the packets are lost, command:
-
-``` $ tc qdisc add dev lo root handle 1:0 netem delay 250msec loss 2.5% ```
+``` $ tc qdisc add dev lo root handle 1:0 netem delay 100ms 10ms distribution normal ```
 
 To reset command:
 
