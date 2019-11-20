@@ -78,6 +78,19 @@ The average time for the three payloads:
 
 For this measurement the client sent 25 medium (~400 kB) file upload requests to the dfs. 
 
+The inter-arrival rate for primary and replica file list update requests are:
+
+* primary:
+    * mean: 2.276277
+    * std: 0.476096
+    * min: 2.310353
+    * max: 2.472921
+* replica: 
+    * mean: 2.274086
+    * std: 0.476313
+    * min: 2.280142
+    * max: 2.446791
+
 ## How reliable is your architecture? 
 
 The architecture is able to achieve very high reliability. The data is replicated to a definable number of nodes, therefore the probability of losing data dependent on this number (probability of losing data = probability of losing a fileNode ^ number of replicas used).
