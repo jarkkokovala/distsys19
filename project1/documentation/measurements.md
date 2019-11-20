@@ -37,7 +37,7 @@ For this measurement the client sent 50 small (~4 kB) file upload requests to th
 
 Instead of measuring communication between the nodes we measure system performance from the client's point of view. We ask 'when is the file available' / 'when is the file reliably available'  (i.e. stored on primary/replica file server).
 
-The average time for the two events:
+The average time for the two events for 50 x the small payload:
 
 * primary file stored and available:
     * mean: 0.750013
