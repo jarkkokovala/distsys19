@@ -76,7 +76,7 @@ The average time for the three payloads:
 
 ### Choose a unique payload, e.g., average size, and then measure the inter arrival rate between messages?
 
-For this measurement the client sent 50 small (~4 kB) file upload requests to the dfs. 
+For this measurement the client sent 25 medium (~400 kB) file upload requests to the dfs. 
 
 ## How reliable is your architecture? 
 
