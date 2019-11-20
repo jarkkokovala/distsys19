@@ -17,8 +17,16 @@ To reset command:
 
 ``` $ tc qdisc del dev lo root```
 
+## Instrumentation
+
+For measuring system performance a small piece of instrumentation code was added to the client and nameNode. The system was timed at following points: 
+1) client sends message to filenode, 
+2) name node receives file list update request. 
 
 ## What is the average time for sending 50 messages between two nodes (random payload)?
+
+For this measurement the client sent 50 file upload requests to the dfs. The random payload was generated with the python3 lorem library.    
+
 
 ## Choose 3 different fixed message sizes (payloads for min, average, max), what is the average time when sending 25 in each case?
 
