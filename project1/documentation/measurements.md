@@ -23,9 +23,9 @@ For measuring system performance a small piece of instrumentation code was added
 1) client sends message to filenode, 
 2) name node receives file list update request. 
 
-Before measuring random latency (described above) was introduced in the system.
+Client code was altered so that a simple loop was introduced to perform the measurements. Random payloads (=file content) were generated with the python3 lorem library. The measuring cod is not included in the repository.
 
-Random payloads (file content) were generated with the python3 lorem library.    
+Before measuring random latency (described above) was introduced in the system.
 
 Measurement data can be found from the [data](./data/mean_110ms_latency) subdirectory.
 
