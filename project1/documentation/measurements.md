@@ -9,7 +9,7 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 Network latency can be emulated with the [NetEm](https://wiki.linuxfoundation.org/networking/netem) tool. On Ubuntu the tool is pre-installed. The tool enables introducing netowork latency on all traffic including local HTTP.
 
-Before measuring network latency of 100ms with random variation sampled from normal distribution with mean 10ms was introduced (with command):
+To introduce network latency of 100ms with random variation sampled from normal distribution with mean 10ms command:
 
 ``` $ tc qdisc add dev lo root handle 1:0 netem delay 100ms 10ms distribution normal ```
 
@@ -17,20 +17,23 @@ To reset command:
 
 ``` $ tc qdisc del dev lo root```
 
-## Instrumentation
+## Measurements
 
 For measuring system performance a small piece of instrumentation code was added to the client and nameNode. The system was timed at following points: 
 1) client sends message to filenode, 
 2) name node receives file list update request. 
 
-## What is the average time for sending 50 messages between two nodes (random payload)?
+Before measuring random latency (described above) was introduced in the system.
 
-For this measurement the client sent 50 file upload requests to the dfs. The random payload was generated with the python3 lorem library.    
+The random payloads (file content) were generated with the python3 lorem library.    
 
+### What is the average time for sending 50 messages between two nodes (random payload)?
 
-## Choose 3 different fixed message sizes (payloads for min, average, max), what is the average time when sending 25 in each case?
+For this measurement the client sent 50 file upload requests to the dfs. 
 
-## Choose a unique payload, e.g., average size, and then measure the inter arrival rate between messages?
+### Choose 3 different fixed message sizes (payloads for min, average, max), what is the average time when sending 25 in each case?
+
+### Choose a unique payload, e.g., average size, and then measure the inter arrival rate between messages?
 
 ## How reliable is your architecture? 
 
