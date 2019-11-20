@@ -39,14 +39,16 @@ Instead of measuring communication between the nodes we measure system performan
 
 The average time for the two events:
 
-* primary file stored and available
+* primary file stored and available:
     * mean: 0.750013
+    * std: 0.023479
     * min: 0.696061
     * max: 0.795315
 * replica file stored and available: 
-    * mean: 0.750013
-    * min: 0.696061
-    * max: 0.795315
+    * mean: 1.814501
+    * std: 0.039680
+    * min: 1.738792
+    * max: 1.923551
 
 ### Choose 3 different fixed message sizes (payloads for min, average, max), what is the average time when sending 25 in each case?
 
