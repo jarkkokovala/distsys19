@@ -27,9 +27,9 @@ Before measuring random latency (described above) was introduced in the system.
 
 The random payloads (file content) were generated with the python3 lorem library.    
 
-Measurement data can be found from the [data subdirectory](./data/mean_110ms_latency).
+Measurement data can be found from the [data](./data/mean_110ms_latency) subdirectory.
 
-The measures displayed below are computed using the [measuring.ipynb](./data/mean_110ms_latency) Jupyter Notebook.
+The measures displayed below are computed using the [measuring.ipynb](./measuring.ipynb) Jupyter Notebook.
 
 ### What is the average time for sending 50 messages between two nodes (random payload)?
 
