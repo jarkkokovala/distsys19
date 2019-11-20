@@ -20,8 +20,8 @@ To reset command:
 ## Measurements
 
 For measuring system performance a small piece of instrumentation code was added to the client and nameNode. The system was timed at following points: 
-1) client sends message to filenode, 
-2) name node receives file list update request. 
+1) client sends a message to the filenode, 
+2) name node receives file list update request and has added the file in the list. 
 
 Client code was altered so that a simple loop was introduced to perform the measurements. Random payloads (=file content) were generated with the python3 lorem library. The measuring cod is not included in the repository.
 
@@ -34,6 +34,19 @@ The measures presented below were computed using the [measuring.ipynb](./measuri
 ### What is the average time for sending 50 messages between two nodes (random payload)?
 
 For this measurement the client sent 50 small (~4 kB) file upload requests to the dfs. 
+
+Instead of measuring communication between the nodes we measure system performance from the client's point of view. We ask 'when is the file available' / 'when is the file reliably available'  (i.e. stored on primary/replica file server).
+
+The average time for the two events:
+
+* primary file stored and available
+    * mean: 0.750013
+    * min: 0.696061
+    * max: 0.795315
+* replica file stored and available: 
+    * mean: 0.750013
+    * min: 0.696061
+    * max: 0.795315
 
 ### Choose 3 different fixed message sizes (payloads for min, average, max), what is the average time when sending 25 in each case?
 
