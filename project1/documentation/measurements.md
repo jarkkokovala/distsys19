@@ -13,7 +13,7 @@ For measuring system performance a small piece of instrumentation code was added
 
 Client code was altered so that a simple loop was introduced to perform the measurements. Random payloads (=file content) were generated with the python3 lorem library. The measuring cod is not included in the repository.
 
-Before measuring to simulate a more realistic setting random latency (described below) was introduced in the system.
+To simulate a more realistic setting random network latency (described below) was introduced in the system before measuring, 
 
 Measurement data can be found from the [data](./data/mean_110ms_latency) subdirectory.
 
