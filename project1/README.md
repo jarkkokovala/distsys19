@@ -31,3 +31,7 @@ Lessons learned
 * Building distributed systems is tricky. You always get surprising failure scenarios and the complexity increases fast especially when you add parallel functionality, even a single thread in the system. 
 * The system is always easier to build in your mind than in practise
 * Try to keep things as simple as possible
+
+## What's next?
+
+* To make the system more reliable, the replication of files to different file nodes should happen dynamically. At the moment the replication is only done to 2 other file nodes, when adding the new file. This means that if the original, and the 2 file nodes containing the copy of the file, are all down, the file can not be retreived. The replication should therefore be done whenever a file node shuts down. This way the file could always be retrieved by the client.
