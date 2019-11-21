@@ -117,6 +117,16 @@ class NameNode:
         with self.fileNodes_lock:
             self.fileNodes[addrport]["files"] = files
         instrumentation.warning("%s;%s;%s" % (self.__class__.__name__, inspect.currentframe().f_code.co_name, instrumentation_id))
+    
+    def get_filelist(self):
+        if len(self.fileNodes) > 0:
+            all_files = []
+            for i in range(len(list(self.fileNodes.keys()))):
+                key = list(self.fileNodes.keys())[i]
+                all_files = all_files + list(self.fileNodes[key]['files'])
+            return list(set(all_files))
+        else:
+            return None
 
     def run(self):
         """
@@ -217,6 +227,17 @@ class NameNodeHTTPRequestHandler(BaseHTTPRequestHandler):
                     response_body = json.dumps(replica_nodes).encode()
                 else:
                     response_code = 400
+            else:
+                response_code = 400
+        elif url.path == "/filelist":
+            files = self.server.node.get_filelist()
+            if files:
+                self.send_response(200)
+                self.send_header("Content-type", 'application/json; charset=utf-8')
+                message = json.dumps(files).encode()
+                self.send_header("Content-length", len(message))
+                self.end_headers()
+                self.wfile.write(message)
             else:
                 response_code = 400
         else:

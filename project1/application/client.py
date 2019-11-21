@@ -111,18 +111,41 @@ class Client:
       print("\nFILE %s DOES NOT EXIST\n" % fileName)
     self.start_ui()
   
+  def fetch_filelist(self):
+    url = 'http://%s:%i/filelist' % self.name_node_address
+    try:
+      response = requests.get(url=url)
+      if response.status_code == 200:
+        text = response.json()
+        return text
+    except HTTPError as http_err:
+        print(f'HTTP error occurred: {http_err}')
+    except Exception as err:
+        print(f'Other error occurred: {err}')
+    return None
+  
+  def get_filelist(self):
+    data = self.fetch_filelist()
+    print("\n********************** FILES **************************\n")
+    if data:
+      for f in data:
+        print(f)
+    print("\n********************************************************\n")
+    self.start_ui()
+  
   def start_ui(self):
     action = None
     while True:
       print("Choose one of the options:")
       print("(1) Save a file")
       print("(2) Read a file")
+      print("(3) Filelist")
       print("(q) Quit")
       action = input()
       if action == "q":
           break
       try:
-        if 1 <= int(action) <= 2:
+        if 1 <= int(action) <= 3:
           break
       except ValueError:
         continue
@@ -133,6 +156,8 @@ class Client:
       self.save_new_file()
     elif action == "2":
       self.fetch_file()
+    elif action == "3":
+      self.get_filelist()
 
   
   def run(self):
