@@ -7,6 +7,23 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 ## Tasks
 
+### Part 2
+
+#### 1. Are these three nets live? Explain how did you check this.
+
+All of the nets are live. A net is live if all of it's transitions are live. A transition is live it is enabled  (=can fire) by some sequence of transitions. A transitions liveness can be shown by finding a sequence of transitions that enables it. In this case for all nets all transitions are enabed for example by executing the shortes path transition sequences described in subtask 3. 
+
+
+#### 2. Are these nets bounded? Explain how did you check this.
+
+
+#### 3. For each of these nets, what is the length of the shortest firing sequence that leads to a marking in which all odd-numbered places have a token? 
+
+
+#### 4. Can you say something about the length of the shortest path that leads to a marking in which all odd-numbered places have a token?
+
+
+
 ### Part 3
 
 ![Kumpula traffic lights](kumpula.png)
