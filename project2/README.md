@@ -35,7 +35,7 @@ The length of the shortest sequence to goal state seems to grow rapidly as the n
 
 ![Shortes firing sequence](shortest_firing_sequence.png)
 
-The estimated number of required transitions in the sequence can be expressed with formula: 
+The estimated number of required transitions in the shortest sequence from initial state to goal state can be expressed with formula: 
 
 ![Shortes firing sequence length formula](firing_sequence_formula.png)
 
