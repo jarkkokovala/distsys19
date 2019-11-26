@@ -37,7 +37,7 @@ The length of the shortest sequence to goal state seems to grow rapidly as the n
 
 The estimated number of required transitions in the sequence can be expressed with formula: 
 
-![Shortes firing sequence length formula](formula.gif)
+![Shortes firing sequence length formula](firing_sequence_formula.png)
 
 where n is the amount of subnets.
 
