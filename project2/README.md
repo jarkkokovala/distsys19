@@ -26,7 +26,7 @@ A net is ```k```-bounded if in all it's reachable markings there is ```k``` so t
 
 The number of transitions are 2, 7 and 18 for nets 1, 2, and 3 respectively.
 
-The shortest firing sequence can be found by building a reachability graph and tracing back the shortest sequence from the goal mrking to the initial marking. For small nets a graphical tool would suffice but for nets larger than these utilizing a shortest path algorithm would be a good choise.  
+The shortest firing sequence can be found by building a reachability graph and tracing back the shortest sequence from the goal marking to the initial marking. For nets with small reachability graph a graphical tool would suffice. For larger reachability graph sizes utilizing a shortest path algorithm would be a good choise.  
 
 #### 4. Can you say something about the length of the shortest path that leads to a marking in which all odd-numbered places have a token?
 
