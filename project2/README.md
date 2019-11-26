@@ -20,7 +20,7 @@ A net is live if all of it's transitions are live. A transition is live it is en
 
 Yes, all of the nets are bounded.
 
-A net is $k$-bounded if in all it's reachable markings there is $k$ so that the amount of tokens in any place is less than $k+1$. If $k=1$ the net is safe. If a net is $k$-bounded it's bounded. In this case for all nets at any reachable marking the amount of tokens in any place is 0 or 1. The nets do not duplicate tokens. This can be checked by looking at the transitions. For all transitions in all nets the amount of incoming and outgoing arcs is the same. Thus the net cannot duplicate or destroy tokens.
+A net is ```k```-bounded if in all it's reachable markings there is ```k``` so that the amount of tokens in any place is less than $k+1$. If $k=1$ the net is safe. If a net is $k$-bounded it's bounded. In this case for all nets at any reachable marking the amount of tokens in any place is 0 or 1. The nets do not duplicate tokens. This can be checked by looking at the transitions. For all transitions in all nets the amount of incoming and outgoing arcs is the same. Thus the net cannot duplicate or destroy tokens.
 
 
 #### 3. For each of these nets, what is the length of the shortest firing sequence that leads to a marking in which all odd-numbered places have a token? 
