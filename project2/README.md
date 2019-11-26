@@ -30,7 +30,7 @@ The shortest firing sequence can be found by building a reachability graph and t
 
 #### 4. Can you say something about the length of the shortest path that leads to a marking in which all odd-numbered places have a token?
 
-The length of the shortest sequence to goal state seems to grow rapidly as the number of subnets increases. Growth rate seems to be exponential. The growth rate is visualized in figure below. 
+The length of the shortest sequence to goal state seems to grow rapidly as the number of subnets increases. Growth seems to be exponential. The figure below visualizes the number of transitions in the shortest path as and the number of subnets fitted on a log-linear curve. 
 
 ![Shortes firing sequence](shortest_firing_sequence.png)
 
