@@ -1,13 +1,13 @@
-# distsys19
-Distributed systems harjoitusryhmä
-
-## Group
+### Group
 
 Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
-## Tasks
+# Project 2
 
-### Part 2
+## Part 1
+
+
+## Part 2
 
 #### 1. Are these three nets live? Explain how did you check this.
 
@@ -42,7 +42,7 @@ The estimated number of required transitions in the sequence can be expressed wi
 where n is the amount of subnets.
 
 
-### Part 3
+## Part 3
 
 ![Kumpula traffic lights](kumpula.png)
 
