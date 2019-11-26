@@ -11,10 +11,16 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 #### 1. Are these three nets live? Explain how did you check this.
 
-All of the nets are live. A net is live if all of it's transitions are live. A transition is live it is enabled  (=can fire) by some sequence of transitions. A transitions liveness can be shown by finding a sequence of transitions that enables it. In this case for all nets all transitions are enabed for example by executing the shortes path transition sequences described in subtask 3. 
+Yes, all of the nets are live. 
+
+A net is live if all of it's transitions are live. A transition is live it is enabled  (=can fire) by some sequence of transitions. A transitions liveness can be shown by finding a sequence of transitions that enables it. In this case for all nets all transitions are enabed for example by executing the shortest transition sequences described in subtask 3. 
 
 
 #### 2. Are these nets bounded? Explain how did you check this.
+
+Yes, all of the nets are bounded.
+
+A net is $k$-bounded if in all it's reachable markings there is $k$ so that the amount of tokens in any place is less than $k+1$. If $k=1$ the net is safe. If a net is $k$-bounded it's bounded. In this case for all nets at any reachable marking the amount of tokens in any place is 0 or 1. The nets do not duplicate tokens. This can be checked by looking at the transitions. For all transitions in all nets the amount of incoming and outgoing arcs is the same. Thus the net cannot duplicate or destroy tokens.
 
 
 #### 3. For each of these nets, what is the length of the shortest firing sequence that leads to a marking in which all odd-numbered places have a token? 
