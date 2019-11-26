@@ -13,7 +13,7 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 Yes, all of the nets are live. 
 
-A net is live if all of it's transitions are live. A transition is live if it is enabled (=it can fire) by some sequence of transitions. A transition's liveness can be shown for example by finding a sequence of transitions that enables it. In this case for all nets all transitions are enabed for example by  executing the shortest transition sequences from the initial state to goal state of subtask 3. 
+A net is live if all of it's transitions are live. A transition is live if it is enabled (=it can fire) by some sequence of transitions. A transition's liveness can be shown for example by finding a sequence of transitions that enables it. In this case for all nets all transitions are enabed by executing the shortest transition sequences from the initial state to goal state of subtask 3. 
 
 #### 2. Are these nets bounded? Explain how did you check this.
 
