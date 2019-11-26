@@ -33,7 +33,7 @@ The shortest firing sequence can be found by building a reachability graph and t
 
 The length of the shortest sequence to goal state seems to grow rapidly as the number of subnets increases. The growth rate is visualized in figure below. 
 
-![Shortes firing sequence](shortes_firing_sequence.png)
+![Shortes firing sequence](shortest_firing_sequence.png)
 
 The estimated number of required transitions in the sequence can be expressed with formula: 
 
