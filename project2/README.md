@@ -6,6 +6,17 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 ## Part 1
 
+#### Vending Machine
+
+In the following solution, the bills that the user has available to be inserted to the machine need to be added as tokens in the appropriate places: "5 kroon", "10 kroon" or "20 kroon".
+
+![Vending machine](vending.png)
+
+#### Exercise: Witness statements
+
+The following solution uses an inhibitor arc, so that report cannot be made until places "witnesses" and "registered" are empty and there is a token in the "in process" place. N defines the number of witnesses needed for the claim, so that the correct amount of tokens is created in the "witnesses" place.
+
+![Witness statements](insurance.png)
 
 ## Part 2
 
