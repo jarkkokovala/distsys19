@@ -6,7 +6,7 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 ## Part 1
 
-#### Vending Machine
+#### Exercise: Vending machine
 
 In the following solution, the bills that the user has available to be inserted to the machine need to be added as tokens in the appropriate places: "5 kroon", "10 kroon" or "20 kroon".
 
