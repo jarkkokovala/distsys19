@@ -43,7 +43,7 @@ Simple and complex patients arrice and leave, number of doctors and nurses fixed
 
 #### Exercise: Two switches
 
-The light is on when the switches are in different positions. Otherwise off.
+The light is on when the switches are in different positions. Otherwise off. The reachability graph would switch between (1, 1, 0, 0) and (0, 0, 1, 1) where ("light off", "switches on same state", "light on", "switches have different state").
 
 ![Two switches](switches.png)
 
