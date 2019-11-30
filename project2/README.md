@@ -39,7 +39,7 @@ Doctors and patients arrive and leave.
 
 Simple and complex patients arrice and leave, number of doctors and nurses fixed.
 
-![Doctor's appointment 3](doctors_2.png)
+![Doctor's appointment 3](doctors_3.png)
 
 
 ## Part 2
