@@ -41,6 +41,13 @@ Simple and complex patients arrice and leave, number of doctors and nurses fixed
 
 ![Doctor's appointment 3](doctors_3.png)
 
+#### Exercise: Two switches
+
+The light is on when the switches are in different positions. Otherwise off.
+
+![Two switches](switches.png)
+
+
 
 ## Part 2
 
