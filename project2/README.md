@@ -26,6 +26,22 @@ The following solution uses an inhibitor arc, so that report cannot be made unti
 
 ![Witness statements](insurance.png)
 
+
+#### Exercise: Doctor's appointment
+
+Patient's arrive and leave, number of doctors fixed.
+
+![Doctor's appointment 1](doctors_1.png)
+
+Doctors and patients arrive and leave.
+
+![Doctor's appointment 2](doctors_2.png)
+
+Simple and complex patients arrice and leave, number of doctors and nurses fixed.
+
+![Doctor's appointment 3](doctors_2.png)
+
+
 ## Part 2
 
 #### 1. Are these three nets live? Explain how did you check this.
