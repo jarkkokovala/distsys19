@@ -47,7 +47,11 @@ The light is on when the switches are in different positions. Otherwise off.
 
 ![Two switches](switches2.png)
 
-Reachability graph:
+Reachability graph where 
+* S0 is the initial state where both switches (A, B) are down and light is off.
+* S1 A Down, B Up, Light On
+* S2 A Up, B Down, Light On
+* S3 A Up, B Up, Light Off
 
 ![Two switches reachability](switches2_reachability.png)
 
