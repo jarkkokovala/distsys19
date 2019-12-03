@@ -5,10 +5,16 @@ INITIALIZER:
   root = Tk()
   t = root.title('Digital Watch')
   gui = DWatchGUI(root, eventhandler)
-  watch = WatchHardware(eventhandler, gui)
+  watch = WatchHardware(eventhandler)
 
   eventhandler.start()
   watch.start()
 
 STATECHART:
-  Initial[DS]
+  TimeDisplay[DS]
+
+TRANSITION:
+  S: TimeDisplay
+  S: TimeDisplay
+  E: Time Advance
+  O: gui.increaseTimeByOne()
