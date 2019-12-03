@@ -10,7 +10,7 @@ class WatchHardware:
         while True:
             time.sleep(1)
             self.timeTicks += 1
-            self.eventhandler.event("Time Advance")
+            self.eventhandler.event("increaseTimeByOne")
 
     def start(self):
         ThreadUtil.StartThread(self.ThreadTimeTick, ())
