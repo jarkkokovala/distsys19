@@ -9,6 +9,7 @@ INITIALIZER:
 
   eventhandler.start()
   watch.start()
+  root.mainloop()
 
 STATECHART:
   TimeDisplay[DS]
