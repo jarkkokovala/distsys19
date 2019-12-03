@@ -1,21 +1,24 @@
 INITIALIZER:
-  from Tkinter import *
-  import WatchHardware
-  import DWatchGUI
-  root = Tk()
-  t = root.title('Digital Watch')
-  gui = DWatchGUI(root, eventhandler)
-  watch = WatchHardware(eventhandler)
+    from Tkinter import *
+    from WatchHardware import *
+    from DWatchGUI import *
 
-  eventhandler.start()
-  watch.start()
-  root.mainloop()
+    root = Tk()
+    root.title('Digital Watch')
+    gui = DWatchGUI(root, eventhandler)
+    watch = WatchHardware(eventhandler)
+
+    eventhandler.start()
+    watch.start()
+    root.mainloop()
 
 STATECHART:
-  TimeDisplay[DS]
+    TimeDisplay [DS]
 
 TRANSITION:
-  S: TimeDisplay
-  S: TimeDisplay
-  E: Time Advance
-  O: gui.increaseTimeByOne()
+    S: TimeDisplay
+    N: TimeDisplay
+    E: increaseTimeByOne
+    O: print "Increase Time By One"
+       gui.increaseTimeByOne()
+

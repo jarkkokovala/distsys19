@@ -7,3 +7,6 @@ dfslog/
 # Jupyter notebook cach
 .ipynb_checkpoints/
 
+# Idea
+.idea/
+
