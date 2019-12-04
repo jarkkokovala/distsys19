@@ -7,7 +7,7 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 ## State chart
 
-![Digital watch](./digital watch.png)
+![Digital watch](./digital_watch.png)
 
 
 ## Implementation
