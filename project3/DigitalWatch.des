@@ -23,3 +23,16 @@ TRANSITION:
     O: print "Increase Time By One"
        gui.increaseTimeByOne()
 
+TRANSITION:
+    S: TimeDisplay
+    N: TimeDisplay
+    E: lightOn
+    O: print "Turn back light on"
+       gui.setIndiglo()
+
+TRANSITION:
+    S: TimeDisplay
+    N: TimeDisplay
+    E: lightOff
+    O: print "Turn back light off"
+       gui.unsetIndiglo()
