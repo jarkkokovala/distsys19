@@ -8,6 +8,7 @@ class WatchHardware:
         self.chronoRunning = False
         self.displayMode = "Time"
         self.topRightPressed = False
+        self.bottomRightPressed = False
 
     def topRightDown(self):
         self.topRightPressed = True
@@ -39,6 +40,33 @@ class WatchHardware:
             ThreadUtil.StartThread(self.ThreadChronoTick, ())
         else:
             self.chronoRunning = False
+
+    def ThreadTimeEdit(self):
+        time.sleep(1.5)
+
+        if self.bottomRightPressed:
+            self.displayMode == "Time Edit"
+            self.timeUpdating = False
+            self.eventhandler.event("startTimeEdit")
+
+    def initTimeEdit(self):
+        self.bottomRightPressed = True
+        ThreadUtil.StartThread(self.ThreadTimeEdit, ())
+
+    def ThreadFinishTimeEdit(self):
+        time.sleep(2)
+
+        if self.bottomRightPressed:
+            self.displayMode == "Time"
+            self.timeUpdating = True
+            self.eventhandler.event("stopTimeEdit")
+
+    def finishTimeEdit(self):
+        self.bottomRightPressed = True
+        ThreadUtil.StartThread(self.ThreadFinishTimeEdit, ())
+    
+    def bottomRightUp(self):
+        self.bottomRightPressed = False    
 
     def ThreadTimeTick(self):
         while True:

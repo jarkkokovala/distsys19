@@ -16,6 +16,7 @@ INITIALIZER:
 STATECHART:
     TimeDisplay [DS]
     ChronoDisplay
+    TimeEdit
 
 TRANSITION:
     S: TimeDisplay
@@ -58,7 +59,7 @@ TRANSITION:
     E: changeMode
     O: watch.changeMode()
        gui.refreshTimeDisplay()
-    
+
 TRANSITION:
     S: ChronoDisplay
     N: ChronoDisplay
@@ -108,3 +109,36 @@ TRANSITION:
     O: print "Reset chrono"
        gui.resetChrono()
        gui.refreshChronoDisplay()
+
+TRANSITION:
+    S: TimeDisplay
+    N: TimeDisplay
+    E: editTime
+    O: print "Bottom right pressed"
+       watch.initTimeEdit()
+
+TRANSITION:
+    S: TimeDisplay
+    N: TimeDisplay
+    E: released
+    O: print "Bottom right released"
+       watch.bottomRightUp()
+
+TRANSITION:
+    S: TimeDisplay
+    N: TimeEdit
+    E: startTimeEdit
+    O: print "Editing time"
+
+TRANSITION:
+    S: TimeEdit
+    N: TimeEdit
+    E: finishEdit
+    O: print "Bottom right pressed"
+       watch.finishTimeEdit()
+
+TRANSITION:
+    S: TimeEdit
+    N: TimeDisplay
+    E: stopTimeEdit
+    O: print "Finished editing time"
