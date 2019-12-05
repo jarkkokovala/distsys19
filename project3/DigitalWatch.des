@@ -142,3 +142,24 @@ TRANSITION:
     N: TimeDisplay
     E: stopTimeEdit
     O: print "Finished editing time"
+
+TRANSITION:
+    S: TimeEdit
+    N: TimeEdit
+    E: lightOn
+    O: print "Turn back light on"
+       watch.topRightDown()
+       gui.setIndiglo()
+
+TRANSITION:
+    S: TimeEdit
+    N: TimeEdit
+    E: lightOff
+    O: watch.topRightUp()
+
+TRANSITION:
+    S: TimeEdit
+    N: TimeEdit
+    E: shutLight
+    O: gui.unsetIndiglo()
+       print "Turn back light off"
