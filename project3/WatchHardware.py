@@ -12,30 +12,36 @@ class WatchHardware:
         self.bottomLeftPressed = False
         self.lastEdit = 0
 
+    # Press top right button
     def topRightDown(self):
         self.topRightPressed = True
 
+    # Thread for timed backlight shutdown
     def ThreadShutLight(self):
         time.sleep(2)
         if not self.topRightPressed:
             self.eventhandler.event("shutLight")
 
+    # Release top right button, initiates timed backlight shutdown
     def topRightUp(self):
         self.topRightPressed = False
         ThreadUtil.StartThread(self.ThreadShutLight, ())
 
+    # Switch between time and chrono modes by pressing top left button in either one
     def changeMode(self):
         if self.displayMode == "Time":
             self.displayMode = "Chrono"
         else:
             self.displayMode = "Time"
 
+    # Thread for running chrono
     def ThreadChronoTick(self):
         while self.chronoRunning:
             time.sleep(0.01)
             if self.chronoRunning:
                 self.eventhandler.event("increaseChronoByOne")
 
+    # Switch chrono running by bottom right button in chrono mode
     def initChrono(self):
         if not self.chronoRunning:
             self.chronoRunning = True
@@ -43,6 +49,7 @@ class WatchHardware:
         else:
             self.chronoRunning = False
 
+    # Thread for timed entering of time edit mode
     def ThreadTimeEdit(self):
         time.sleep(1.5)
 
@@ -57,25 +64,30 @@ class WatchHardware:
             
             self.stopTimeEdit()
 
+    # Press bottom right button in time mode to start enterint time edit mode
     def initTimeEdit(self):
         self.bottomRightPressed = True
         ThreadUtil.StartThread(self.ThreadTimeEdit, ())
 
+    # Really exit time edit mode (called from timed exiting or timeout in time edit thread)
     def stopTimeEdit(self):
         self.displayMode == "Time"
         self.timeUpdating = True
         self.eventhandler.event("stopTimeEdit")
 
+    # Timed exiting time edit
     def ThreadFinishTimeEdit(self):
         time.sleep(2)
 
         if self.bottomRightPressed:
             self.stopTimeEdit()
 
+    # Press bottom right button in time edit mode to start exiting time edit
     def finishTimeEdit(self):
         self.bottomRightPressed = True
         ThreadUtil.StartThread(self.ThreadFinishTimeEdit, ())
     
+    # Release bottom right button
     def bottomRightUp(self):
         self.bottomRightPressed = False    
 
@@ -93,6 +105,7 @@ class WatchHardware:
 
         ThreadUtil.StartThread(self.ThreadTimeIncrease, ())
 
+    # Release left button in time edit mode
     def stopTimeIncrease(self):
         self.bottomLeftPressed = False
 
@@ -103,5 +116,6 @@ class WatchHardware:
             if self.timeUpdating:
                 self.eventhandler.event("increaseTimeByOne")
 
+    # Start the watch
     def start(self):
         ThreadUtil.StartThread(self.ThreadTimeTick, ())
