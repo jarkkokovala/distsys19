@@ -4,8 +4,8 @@ import ThreadUtil
 class WatchHardware:
     def __init__(self, eventhandler):
         self.eventhandler = eventhandler
-        self.timeTicks = 0
         self.timeUpdating = True
+        self.chronoRunning = False
         self.displayMode = "Time"
         self.topRightPressed = False
 
@@ -27,11 +27,23 @@ class WatchHardware:
         else:
             self.displayMode = "Time"
 
+    def ThreadChronoTick(self):
+        while self.chronoRunning:
+            time.sleep(0.01)
+            if self.chronoRunning:
+                self.eventhandler.event("increaseChronoByOne")
+
+    def initChrono(self):
+        if not self.chronoRunning:
+            self.chronoRunning = True
+            ThreadUtil.StartThread(self.ThreadChronoTick, ())
+        else:
+            self.chronoRunning = False
+
     def ThreadTimeTick(self):
         while True:
             time.sleep(1)
             if self.timeUpdating:
-                self.timeTicks += 1
                 self.eventhandler.event("increaseTimeByOne")
 
     def start(self):

@@ -86,3 +86,17 @@ TRANSITION:
     E: shutLight
     O: gui.unsetIndiglo()
        print "Turn back light off"
+
+TRANSITION:
+    S: ChronoDisplay
+    N: ChronoDisplay
+    E: initChrono
+    O: print "Starting/stopping chrono"
+       watch.initChrono()
+
+TRANSITION:
+    S: ChronoDisplay
+    N: ChronoDisplay
+    E: increaseChronoByOne
+    O: gui.increaseChronoByOne()
+       gui.refreshChronoDisplay()
