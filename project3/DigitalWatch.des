@@ -100,3 +100,11 @@ TRANSITION:
     E: increaseChronoByOne
     O: gui.increaseChronoByOne()
        gui.refreshChronoDisplay()
+
+TRANSITION:
+    S: ChronoDisplay
+    N: ChronoDisplay
+    E: resetChrono
+    O: print "Reset chrono"
+       gui.resetChrono()
+       gui.refreshChronoDisplay()
