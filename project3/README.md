@@ -8,8 +8,8 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 ## State chart
 
 Digital watch state chart is divided in three parts. 
-* The first part describes the back light on/on operation. The back light can be toggled on/off from any watch state. Toggling the back light on/off is independent of other funcitonality, it does not infer with other clock operations.
-* The second part describes the alarm on/on operation. Similar to back light alarm can fire from any watch state and it's independent from other clock operations.
+* The first part describes the back light on/on operation. The back light can be toggled on/off from any watch state. Toggling the back light on/off is independent of the main watch funcitonality.
+* The second part describes the alarm on/on operation. Similar to back light alarm can fire from any watch state and it's independent from main watch functionality.
 * The third part describes the main watch functionality.
 
 ![Digital watch](./digital_watch.png)
