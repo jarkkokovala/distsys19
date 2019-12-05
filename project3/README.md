@@ -7,11 +7,14 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 ## State chart
 
-The original state chart for the digital watch is displayed below. The state chart may not be one-to-one with the implementation. Due to time-constraints for the project and other course work implementation-time changes are not reflected in the state chart. 
+Digital watch state chart is divided in three parts. 
+* The first part describes the back light on/on operation. The back light can be toggled on/off from any watch state. Toggling the back light on/off is independent of the main watch funcitonality.
+* The second part describes the alarm on/on operation. Similar to back light alarm can fire from any watch state and it's independent from main watch functionality.
+* The third part describes the main watch functionality.
 
-![State chart](./state_chart.png)
-<!--https://app.creately.com/diagram/b8VoaBexcRG-->
+![Digital watch](./digital_watch.png)
 
+The original state chart for the digital watch is displayed above. The state chart may not be one-to-one with the implementation. Due to time-constraints for the project implementation-time changes may not be reflected in the state chart. 
 
 ## Implementation
 
