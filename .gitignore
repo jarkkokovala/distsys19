@@ -10,3 +10,8 @@ dfslog/
 # Idea
 .idea/
 
+# project3 .pyc files
+project3/DWatchGUI.pyc
+project3/LowLevelGUI.pyc
+project3/WatchHardware.pyc
+
