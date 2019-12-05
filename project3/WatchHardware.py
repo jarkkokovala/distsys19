@@ -6,6 +6,7 @@ class WatchHardware:
         self.eventhandler = eventhandler
         self.timeTicks = 0
         self.timeUpdating = True
+        self.displayMode = "Time"
         self.topRightPressed = False
 
     def topRightDown(self):
@@ -19,6 +20,12 @@ class WatchHardware:
     def topRightUp(self):
         self.topRightPressed = False
         ThreadUtil.StartThread(self.ThreadShutLight, ())
+
+    def changeMode(self):
+        if self.displayMode == "Time":
+            self.displayMode = "Chrono"
+        else:
+            self.displayMode = "Time"
 
     def ThreadTimeTick(self):
         while True:

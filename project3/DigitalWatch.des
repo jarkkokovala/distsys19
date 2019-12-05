@@ -15,6 +15,7 @@ INITIALIZER:
 
 STATECHART:
     TimeDisplay [DS]
+    ChronoDisplay
 
 TRANSITION:
     S: TimeDisplay
@@ -40,6 +41,48 @@ TRANSITION:
 TRANSITION:
     S: TimeDisplay
     N: TimeDisplay
+    E: shutLight
+    O: gui.unsetIndiglo()
+       print "Turn back light off"
+
+TRANSITION:
+    S: TimeDisplay
+    N: ChronoDisplay
+    E: changeMode
+    O: watch.changeMode()
+       gui.refreshChronoDisplay()
+
+TRANSITION:
+    S: ChronoDisplay
+    N: TimeDisplay
+    E: changeMode
+    O: watch.changeMode()
+       gui.refreshTimeDisplay()
+    
+TRANSITION:
+    S: ChronoDisplay
+    N: ChronoDisplay
+    E: increaseTimeByOne
+    O: print "Increase Time By One"
+       gui.GUI.increaseTimeByOne()
+
+TRANSITION:
+    S: ChronoDisplay
+    N: ChronoDisplay
+    E: lightOn
+    O: print "Turn back light on"
+       watch.topRightDown()
+       gui.setIndiglo()
+
+TRANSITION:
+    S: ChronoDisplay
+    N: ChronoDisplay
+    E: lightOff
+    O: watch.topRightUp()
+
+TRANSITION:
+    S: ChronoDisplay
+    N: ChronoDisplay
     E: shutLight
     O: gui.unsetIndiglo()
        print "Turn back light off"
