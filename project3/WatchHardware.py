@@ -9,6 +9,7 @@ class WatchHardware:
         self.displayMode = "Time"
         self.topRightPressed = False
         self.bottomRightPressed = False
+        self.lastEdit = 0
 
     def topRightDown(self):
         self.topRightPressed = True
@@ -45,21 +46,30 @@ class WatchHardware:
         time.sleep(1.5)
 
         if self.bottomRightPressed:
-            self.displayMode == "Time Edit"
+            self.displayMode = "Time Edit"
             self.timeUpdating = False
+            self.lastEdit = time.time()
             self.eventhandler.event("startTimeEdit")
+
+            while self.displayMode == "Time Edit" and time.time() < self.lastEdit + 5:
+                time.sleep(1)
+            
+            self.stopTimeEdit()
 
     def initTimeEdit(self):
         self.bottomRightPressed = True
         ThreadUtil.StartThread(self.ThreadTimeEdit, ())
 
+    def stopTimeEdit(self):
+        self.displayMode == "Time"
+        self.timeUpdating = True
+        self.eventhandler.event("stopTimeEdit")
+
     def ThreadFinishTimeEdit(self):
         time.sleep(2)
 
         if self.bottomRightPressed:
-            self.displayMode == "Time"
-            self.timeUpdating = True
-            self.eventhandler.event("stopTimeEdit")
+            self.stopTimeEdit()
 
     def finishTimeEdit(self):
         self.bottomRightPressed = True
