@@ -16,7 +16,7 @@ The topLeftPressed event is not displayed in the chart since it has no functiona
 
 ![Digital watch](./digital_watch.png)
 
-The original state chart for the digital watch is displayed above. The state chart may not be one-to-one with the implementation. Due to time-constraints for the project implementation-time changes may not be reflected in the state chart. 
+The original state chart for the digital watch is displayed above. The state chart may not be one-to-one with the implementation. Due to time-constraints for the project and other student work updateing implementation-time modifications on the chart was not possible. 
 
 ## Implementation
 
