@@ -28,11 +28,18 @@ TRANSITION:
     N: TimeDisplay
     E: lightOn
     O: print "Turn back light on"
+       watch.topRightDown()
        gui.setIndiglo()
 
 TRANSITION:
     S: TimeDisplay
     N: TimeDisplay
     E: lightOff
-    O: print "Turn back light off"
-       gui.unsetIndiglo()
+    O: watch.topRightUp()
+
+TRANSITION:
+    S: TimeDisplay
+    N: TimeDisplay
+    E: shutLight
+    O: gui.unsetIndiglo()
+       print "Turn back light off"
