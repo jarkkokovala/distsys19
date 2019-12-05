@@ -14,7 +14,7 @@ Digital watch state chart is divided in three parts.
 
 ![Digital watch](./digital_watch.png)
 
-The original state chart for the digital watch is displayed above. The state chart may not be one-to-one with the implementation. Due to time-constraints for the project and other course work implementation-time changes are not reflected in the state chart. 
+The original state chart for the digital watch is displayed above. The state chart may not be one-to-one with the implementation. Due to time-constraints for the project implementation-time changes may not be reflected in the state chart. 
 
 ## Implementation
 
