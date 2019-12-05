@@ -163,3 +163,24 @@ TRANSITION:
     E: shutLight
     O: gui.unsetIndiglo()
        print "Turn back light off"
+
+TRANSITION:
+    S: TimeEdit
+    N: TimeEdit
+    E: increase
+    O: print "Increasing time"
+       watch.initTimeIncrease()
+
+TRANSITION:
+    S: TimeEdit
+    N: TimeEdit
+    E: stopInc
+    O: print "Stopping increase"
+       watch.stopTimeIncrease()
+
+TRANSITION:
+    S: TimeEdit
+    N: TimeEdit
+    E: increaseTimeByOne
+    O: print "Increase Time By One"
+       gui.increaseTimeByOne()

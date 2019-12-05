@@ -9,6 +9,7 @@ class WatchHardware:
         self.displayMode = "Time"
         self.topRightPressed = False
         self.bottomRightPressed = False
+        self.bottomLeftPressed = False
         self.lastEdit = 0
 
     def topRightDown(self):
@@ -78,6 +79,24 @@ class WatchHardware:
     def bottomRightUp(self):
         self.bottomRightPressed = False    
 
+    # Time increase thread for editing mode
+    def ThreadTimeIncrease(self):
+        while self.bottomLeftPressed:
+            self.eventhandler.event("increaseTimeByOne")
+            self.lastEdit = time.time()
+            time.sleep(0.3)
+
+    # Bottom left pressed in time edit mode, increase time and start thread
+    def initTimeIncrease(self):
+        self.bottomLeftPressed = True
+        self.lastEdit = time.time()
+
+        ThreadUtil.StartThread(self.ThreadTimeIncrease, ())
+
+    def stopTimeIncrease(self):
+        self.bottomLeftPressed = False
+
+    # Timer tick thread for time/chrono modes
     def ThreadTimeTick(self):
         while True:
             time.sleep(1)
