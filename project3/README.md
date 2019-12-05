@@ -12,6 +12,8 @@ Digital watch state chart is divided in three parts.
 * The second part describes the alarm on/on operation. Similar to back light alarm can fire from any watch state and it's independent from main watch functionality.
 * The third part describes the main watch functionality.
 
+The topLeftPressed event is not displayed in the chart since it has no functionality attached to it. Releasing the top left button alternates between chrono and time display mode. Pressing the button does nothing.
+
 ![Digital watch](./digital_watch.png)
 
 The original state chart for the digital watch is displayed above. The state chart may not be one-to-one with the implementation. Due to time-constraints for the project implementation-time changes may not be reflected in the state chart. 
