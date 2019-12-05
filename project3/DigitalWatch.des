@@ -14,173 +14,135 @@ INITIALIZER:
     exit()
 
 STATECHART:
-    TimeDisplay [DS]
-    ChronoDisplay
-    TimeEdit
+    Watch [DS] [CS]
+     TimeDisplay [DS]
+     ChronoDisplay
+     TimeEdit
+    Backlight [DS] [CS]
+     Off [DS]
+     On
 
 TRANSITION:
-    S: TimeDisplay
-    N: TimeDisplay
+    S: Watch.TimeDisplay
+    N: Watch.TimeDisplay
     E: increaseTimeByOne
     O: print "Increase Time By One"
        gui.increaseTimeByOne()
 
 TRANSITION:
-    S: TimeDisplay
-    N: TimeDisplay
+    S: Backlight.Off
+    N: Backlight.On
     E: lightOn
     O: print "Turn back light on"
        watch.topRightDown()
        gui.setIndiglo()
 
 TRANSITION:
-    S: TimeDisplay
-    N: TimeDisplay
+    S: Backlight.On
+    N: Backlight.On
     E: lightOff
     O: watch.topRightUp()
 
 TRANSITION:
-    S: TimeDisplay
-    N: TimeDisplay
+    S: Backlight.On
+    N: Backlight.Off
     E: shutLight
     O: gui.unsetIndiglo()
        print "Turn back light off"
 
 TRANSITION:
-    S: TimeDisplay
-    N: ChronoDisplay
+    S: Watch.TimeDisplay
+    N: Watch.ChronoDisplay
     E: changeMode
     O: watch.changeMode()
        gui.refreshChronoDisplay()
 
 TRANSITION:
-    S: ChronoDisplay
-    N: TimeDisplay
+    S: Watch.ChronoDisplay
+    N: Watch.TimeDisplay
     E: changeMode
     O: watch.changeMode()
        gui.refreshTimeDisplay()
 
 TRANSITION:
-    S: ChronoDisplay
-    N: ChronoDisplay
+    S: Watch.ChronoDisplay
+    N: Watch.ChronoDisplay
     E: increaseTimeByOne
     O: print "Increase Time By One"
        gui.GUI.increaseTimeByOne()
 
 TRANSITION:
-    S: ChronoDisplay
-    N: ChronoDisplay
-    E: lightOn
-    O: print "Turn back light on"
-       watch.topRightDown()
-       gui.setIndiglo()
-
-TRANSITION:
-    S: ChronoDisplay
-    N: ChronoDisplay
-    E: lightOff
-    O: watch.topRightUp()
-
-TRANSITION:
-    S: ChronoDisplay
-    N: ChronoDisplay
-    E: shutLight
-    O: gui.unsetIndiglo()
-       print "Turn back light off"
-
-TRANSITION:
-    S: ChronoDisplay
-    N: ChronoDisplay
+    S: Watch.ChronoDisplay
+    N: Watch.ChronoDisplay
     E: initChrono
     O: print "Starting/stopping chrono"
        watch.initChrono()
 
 TRANSITION:
-    S: ChronoDisplay
-    N: ChronoDisplay
+    S: Watch.ChronoDisplay
+    N: Watch.ChronoDisplay
     E: increaseChronoByOne
     O: gui.increaseChronoByOne()
        gui.refreshChronoDisplay()
 
 TRANSITION:
-    S: ChronoDisplay
-    N: ChronoDisplay
+    S: Watch.ChronoDisplay
+    N: Watch.ChronoDisplay
     E: resetChrono
     O: print "Reset chrono"
        gui.resetChrono()
        gui.refreshChronoDisplay()
 
 TRANSITION:
-    S: TimeDisplay
-    N: TimeDisplay
+    S: Watch.TimeDisplay
+    N: Watch.TimeDisplay
     E: editTime
     O: print "Bottom right pressed"
        watch.initTimeEdit()
 
 TRANSITION:
-    S: TimeDisplay
-    N: TimeDisplay
+    S: Watch.TimeDisplay
+    N: Watch.TimeDisplay
     E: released
     O: print "Bottom right released"
        watch.bottomRightUp()
 
 TRANSITION:
-    S: TimeDisplay
-    N: TimeEdit
+    S: Watch.TimeDisplay
+    N: Watch.TimeEdit
     E: startTimeEdit
     O: print "Editing time"
 
 TRANSITION:
-    S: TimeEdit
-    N: TimeEdit
+    S: Watch.TimeEdit
+    N: Watch.TimeEdit
     E: finishEdit
     O: print "Bottom right pressed"
        watch.finishTimeEdit()
 
 TRANSITION:
-    S: TimeEdit
-    N: TimeDisplay
+    S: Watch.TimeEdit
+    N: Watch.TimeDisplay
     E: stopTimeEdit
     O: print "Finished editing time"
 
 TRANSITION:
-    S: TimeEdit
-    N: TimeEdit
-    E: lightOn
-    O: print "Turn back light on"
-       watch.topRightDown()
-       gui.setIndiglo()
-
-TRANSITION:
-    S: TimeEdit
-    N: TimeEdit
-    E: lightOff
-    O: watch.topRightUp()
-
-TRANSITION:
-    S: TimeEdit
-    N: TimeEdit
-    E: shutLight
-    O: gui.unsetIndiglo()
-       print "Turn back light off"
-
-TRANSITION:
-    S: TimeEdit
-    N: TimeEdit
+    S: Watch.TimeEdit
+    N: Watch.TimeEdit
     E: increase
     O: print "Increasing time"
        watch.initTimeIncrease()
 
 TRANSITION:
-    S: TimeEdit
-    N: TimeEdit
+    S: Watch.TimeEdit
+    N: Watch.TimeEdit
     E: stopInc
     O: print "Stopping increase"
        watch.stopTimeIncrease()
 
 TRANSITION:
-    S: TimeEdit
-    N: TimeEdit
+    S: Watch.TimeEdit
+    N: Watch.TimeEdit
     E: increaseTimeByOne
     O: print "Increase Time By One"
        gui.increaseTimeByOne()
