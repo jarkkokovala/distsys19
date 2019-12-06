@@ -8,8 +8,8 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 ## State chart
 
 State chart for the digital watch is divided in three parts. 
-* The first part describes the back light on/off operation. The back light can be toggled on/off from any watch state. Toggling the back light on/off is independent of the main watch functionality.
-* The second part describes the alarm on/off operation. Similar to back light alarm can fire from any watch state and it's independent from main watch functionality.
+* The first part describes the back light on/off operation. The back light can be toggled on/off from any watch state. Toggling the back light on/off is independent of other watch functionality.
+* The second part describes the alarm on/off operation. Similar to back light alarm can fire from any watch state and it's independent of other watch functionality.
 * The third part describes the main watch operations: time, chrono and alarm display modes and time and alarm edit modes.
 
 The topLeftPressed event is not displayed in the chart since it has no functionality attached to it. Pushing the top left button  alternates between chrono and time display mode. This functionality attached to the topLeftReleased event.
