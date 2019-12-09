@@ -10,11 +10,14 @@ class WatchHardware:
         self.topRightPressed = False
         self.bottomRightPressed = False
         self.bottomLeftPressed = False
+        self.alarming = False
         self.lastEdit = 0
 
     # Press top right button
     def topRightDown(self):
         self.topRightPressed = True
+        if self.alarming:
+            self.alarming = False
 
     # Thread for timed backlight shutdown
     def ThreadShutLight(self):
@@ -163,14 +166,19 @@ class WatchHardware:
                 self.eventhandler.event("increaseTimeByOne")
     
     def alarm(self):
+        self.alarming = True
         ThreadUtil.StartThread(self.AlarmThread, ())
     
     def AlarmThread(self):
         times = 0
-        while times < 4:
+        while times < 8 and self.alarming:
             self.eventhandler.event("toggleLight")
             times += 1
             time.sleep(0.5)
+        self.alarming = False
+        # if light is on, switch it off
+        if times % 2 == 1:
+            self.eventhandler.event("toggleLight")
 
 
     # Start the watch
