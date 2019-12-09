@@ -147,6 +147,18 @@ class WatchHardware:
     def stopTimeIncrease(self):
         self.bottomLeftPressed = False
 
+    # Timed exiting alarm edit
+    def ThreadFinishAlarmEdit(self):
+        time.sleep(2)
+
+        if self.bottomRightPressed:
+            self.stopAlarmEdit()
+
+    # Press bottom right button in time edit mode to start exiting alarm edit
+    def finishAlarmEdit(self):
+        self.bottomRightPressed = True
+        ThreadUtil.StartThread(self.ThreadFinishAlarmEdit, ())
+
     # Timer tick thread for time/chrono modes
     def ThreadTimeTick(self):
         while True:
