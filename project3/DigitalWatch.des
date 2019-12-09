@@ -250,3 +250,23 @@ TRANSITION:
     E: released
     O: print "Bottom right released"
        watch.bottomRightUp()
+
+TRANSITION:
+    S: Watch.TimeDisplay
+    N: Watch.TimeDisplay
+    E: alarming
+    O: watch.alarm()
+
+TRANSITION:
+    S: Backlight.Off
+    N: Backlight.On
+    E: toggleLight
+    O: print "Toggle light"
+       gui.setIndiglo()
+
+TRANSITION:
+    S: Backlight.On
+    N: Backlight.Off
+    E: toggleLight
+    O: print "Toggle light"
+       gui.unsetIndiglo()

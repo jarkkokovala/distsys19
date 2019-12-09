@@ -37,11 +37,7 @@ class WatchHardware:
     def checkTime(self, alarm, gui):
         if alarm != None:
             if gui.checkTime():
-                print "ALARM"
-            else:
-                print "No alarm"
-        else:
-            print "Alarm not set"
+                gui.alarmStart()
 
     def selectNext(self):
         self.lastEdit = time.time()
@@ -165,6 +161,17 @@ class WatchHardware:
             time.sleep(1)
             if self.timeUpdating:
                 self.eventhandler.event("increaseTimeByOne")
+    
+    def alarm(self):
+        ThreadUtil.StartThread(self.AlarmThread, ())
+    
+    def AlarmThread(self):
+        times = 0
+        while times < 4:
+            self.eventhandler.event("toggleLight")
+            times += 1
+            time.sleep(0.5)
+
 
     # Start the watch
     def start(self):
