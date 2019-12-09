@@ -176,9 +176,7 @@ class WatchHardware:
             times += 1
             time.sleep(0.5)
         self.alarming = False
-        # if light is on, switch it off
-        if times % 2 == 1:
-            self.eventhandler.event("toggleLight")
+        self.eventhandler.event("shutLight")
 
 
     # Start the watch
