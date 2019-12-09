@@ -18,6 +18,7 @@ STATECHART:
      TimeDisplay [DS]
      ChronoDisplay
      TimeEdit
+     AlarmEdit
     Backlight [DS] [CS]
      Off [DS]
      On
@@ -26,7 +27,9 @@ TRANSITION:
     S: Watch.TimeDisplay
     N: Watch.TimeDisplay
     E: increaseTimeByOne
-    O: print "Increase Time By One"
+    O: print "Increase Time By One on timedisplay"
+       #if gui.GUI.alarmNoteTag != None:
+       #   gui.checkTime()
        gui.increaseTimeByOne()
 
 TRANSITION:
@@ -146,3 +149,78 @@ TRANSITION:
     E: increaseTimeByOne
     O: print "Increase Time By One"
        gui.increaseTimeByOne()
+
+TRANSITION:
+    S: Watch.TimeDisplay
+    N: Watch.TimeDisplay
+    E: setAlarm
+    O: print "Bottom left pressed"
+       watch.initAlarmEdit()
+
+TRANSITION:
+    S: Watch.TimeDisplay
+    N: Watch.AlarmEdit
+    E: startAlarmEdit
+    O: print "Editing alarm"
+       gui.refreshAlarmDisplay()
+       gui.startSelection()
+
+TRANSITION:
+    S: Watch.AlarmEdit
+    N: Watch.TimeDisplay
+    E: stopAlarmEdit
+    O: print "Finished editing alarm"
+       gui.stopSelection()
+       gui.refreshTimeDisplay()
+
+TRANSITION:
+    S: Watch.TimeDisplay
+    N: Watch.TimeDisplay
+    E: onoff
+    O: print "Bottom left released"
+       watch.stopTimeIncrease()
+       gui.setAlarm()
+
+TRANSITION:
+    S: Watch.AlarmEdit
+    N: Watch.AlarmEdit
+    E: increaseTimeByOne
+    O: print "Increase Time By One"
+       gui.GUI.increaseTimeByOne()
+
+TRANSITION:
+    S: Watch.AlarmEdit
+    N: Watch.AlarmEdit
+    E: onoff
+    O: print "onoff"
+       watch.stopTimeIncrease()
+
+TRANSITION:
+    S: Watch.AlarmEdit
+    N: Watch.AlarmEdit
+    E: increase
+    O: print "Increasing time"
+       watch.initTimeIncrease()
+
+TRANSITION:
+    S: Watch.AlarmEdit
+    N: Watch.AlarmEdit
+    E: stopInc
+    O: print "Stopping increase"
+       watch.stopTimeIncrease()
+
+TRANSITION:
+    S: Watch.AlarmEdit
+    N: Watch.AlarmEdit
+    E: increaseAlarmByOne
+    O: print "Increase Alarm By One"
+       gui.increaseSelection()
+
+TRANSITION:
+    S: Watch.AlarmEdit
+    N: Watch.AlarmEdit
+    E: changeMode
+    O: print "Changing selection"
+       watch.selectNext()
+       gui.selectNext()
+       

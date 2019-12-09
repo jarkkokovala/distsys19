@@ -33,6 +33,9 @@ class WatchHardware:
             self.displayMode = "Chrono"
         else:
             self.displayMode = "Time"
+    
+    def selectNext(self):
+        self.lastEdit = time.time()
 
     # Thread for running chrono
     def ThreadChronoTick(self):
@@ -63,17 +66,39 @@ class WatchHardware:
                 time.sleep(1)
             
             self.stopTimeEdit()
+    
+    def ThreadAlarmEdit(self):
+        time.sleep(1.5)
+        if self.bottomLeftPressed:
+            self.displayMode = "Alarm Edit"
+            self.lastEdit = time.time()
+            self.eventhandler.event("startAlarmEdit")
+            
+            while self.displayMode == "Alarm Edit" and time.time() < self.lastEdit + 5:
+                time.sleep(1)
+            
+            self.stopAlarmEdit()
 
     # Press bottom right button in time mode to start enterint time edit mode
     def initTimeEdit(self):
         self.bottomRightPressed = True
         ThreadUtil.StartThread(self.ThreadTimeEdit, ())
+    
+    def initAlarmEdit(self):
+        self.bottomLeftPressed = True
+        print("Alarm edit")
+        ThreadUtil.StartThread(self.ThreadAlarmEdit, ())
 
     # Really exit time edit mode (called from timed exiting or timeout in time edit thread)
     def stopTimeEdit(self):
         self.displayMode == "Time"
         self.timeUpdating = True
         self.eventhandler.event("stopTimeEdit")
+    
+    def stopAlarmEdit(self):
+        self.displayMode == "Time"
+        self.timeUpdating = True
+        self.eventhandler.event("stopAlarmEdit")
 
     # Timed exiting time edit
     def ThreadFinishTimeEdit(self):
@@ -94,7 +119,11 @@ class WatchHardware:
     # Time increase thread for editing mode
     def ThreadTimeIncrease(self):
         while self.bottomLeftPressed:
-            self.eventhandler.event("increaseTimeByOne")
+            if self.displayMode == "Time Edit":
+                self.eventhandler.event("increaseTimeByOne")
+            else:
+                # Alarm Edit
+                self.eventhandler.event("increaseAlarmByOne")
             self.lastEdit = time.time()
             time.sleep(0.3)
 
