@@ -20,4 +20,14 @@ The original state chart for the digital watch is displayed above. The state cha
 
 ## Implementation
 
-Something something something.
+The watch implementation has three parts: the state machine (DigitalWatch.des), watch functionality (WatchHardware.py) and the GUI (LowLevelGUI and DWatchGUI as supplied with the task).
+
+The state machine only has callouts to the other components to separate the functionality from the model.
+
+Delayed events, such as timed shutting of the backlight, entering & exiting of chrono and edit states, etc are implemented as threads that are started when the time counter begins and launch an event after a delay. For example, to enter time edit, a thread is started when bottom right button is pressed. The thread sleeps for 1.5 seconds, and if the button is still pressed, an event is launched to switch the state to time edit. The same thread continues to periodically check if five seconds is passed since the last edit, to automatically switch back to time display mode.
+
+Time ticks are implemented by a thread that runs continuously to launch events every second that increment the time. There is an internal boolean that disables updating of time for this thread to stop updates while in time edit.
+
+The application can be launched with Python SVM with the command (run the command in the same working directory with the application source files) 
+
+> python /path/to/svm.py DigitalWatch.des
