@@ -28,8 +28,8 @@ TRANSITION:
     N: Watch.TimeDisplay
     E: increaseTimeByOne
     O: print "Increase Time By One on timedisplay"
-       #if gui.GUI.alarmNoteTag != None:
-       #   gui.checkTime()
+       alarmOn = gui.GUI.alarmNoteTag
+       watch.checkTime(alarmOn, gui)
        gui.increaseTimeByOne()
 
 TRANSITION:

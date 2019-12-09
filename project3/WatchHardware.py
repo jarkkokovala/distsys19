@@ -34,6 +34,15 @@ class WatchHardware:
         else:
             self.displayMode = "Time"
     
+    def checkTime(self, alarm, gui):
+        if alarm != None:
+            if gui.checkTime():
+                print "ALARM"
+            else:
+                print "No alarm"
+        else:
+            print "Alarm not set"
+
     def selectNext(self):
         self.lastEdit = time.time()
 
