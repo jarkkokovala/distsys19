@@ -151,6 +151,13 @@ TRANSITION:
        gui.increaseTimeByOne()
 
 TRANSITION:
+    S: Watch.TimeEdit
+    N: Watch.TimeEdit
+    E: released
+    O: print "Bottom right released"
+       watch.bottomRightUp()
+
+TRANSITION:
     S: Watch.TimeDisplay
     N: Watch.TimeDisplay
     E: setAlarm
@@ -223,4 +230,23 @@ TRANSITION:
     O: print "Changing selection"
        watch.selectNext()
        gui.selectNext()
-       
+
+TRANSITION:
+    S: Watch.AlarmEdit
+    N: Watch.AlarmEdit
+    E: finishEdit
+    O: print "Bottom right pressed"
+       watch.finishAlarmEdit()
+
+TRANSITION:
+    S: Watch.AlarmEdit
+    N: Watch.TimeDisplay
+    E: stopAlarmEdit
+    O: print "Finished editing alarm"
+
+TRANSITION:
+    S: Watch.AlarmEdit
+    N: Watch.AlarmEdit
+    E: released
+    O: print "Bottom right released"
+       watch.bottomRightUp()
