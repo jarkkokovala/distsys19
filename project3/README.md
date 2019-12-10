@@ -12,11 +12,18 @@ State chart for the digital watch is divided in three parts.
 * The second part describes the alarm on/off operation. Similar to back light alarm can fire from any watch state and it's independent of other watch functionality.
 * The third part describes the main watch operations: time, chrono and alarm display modes and time and alarm edit modes.
 
-The topLeftPressed event is not displayed in the chart since it has no functionality attached to it. Pushing the top left button  alternates between chrono and time display mode. This functionality attached to the topLeftReleased event.
+The topLeftPressed event is not displayed in the chart since the task description does not describe any event that would require it. Pushing the top left button alternates between chrono and time display mode. This functionality is attached to the topLeftReleased event.
 
 ![Digital watch](./digital_watch.png)
 
-The original state chart for the digital watch is displayed above. The state chart may not be one-to-one with the implementation. Due to time-constraints for the project and other student work updating implementation-time modifications on the chart was not feasible. 
+The original state chart for the digital watch is displayed above. The chart reflects the task description for project 3 and is not one-to-one with the implementation. The chart does not reflect all implementation-time modifications on watch functionality.  This is due to time-constraints on the project and other student work. 
+
+The following watch functionality is not reflected on the chart: 
+* Alarm activated sign
+    Alarm activated sign is displayed on watch screen when an alarm is set and has been activated. Alarm can be activated by pushing briefly the bottom right button. Alarm will not fire if it hasn't been activated.
+* Move edit position on edit mode
+    When in time or alarm edit mode the edit position (hour, minute, second) can be changed by pressing the top left button. 
+
 
 ## Implementation
 
