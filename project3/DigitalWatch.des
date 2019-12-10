@@ -33,6 +33,12 @@ TRANSITION:
        gui.increaseTimeByOne()
 
 TRANSITION:
+    S: Watch.TimeDisplay
+    N: Watch.TimeDisplay
+    E: increaseChronoByOne
+    O: gui.increaseChronoByOne()
+
+TRANSITION:
     S: Backlight.Off
     N: Backlight.On
     E: lightOn
@@ -119,6 +125,12 @@ TRANSITION:
 TRANSITION:
     S: Watch.TimeEdit
     N: Watch.TimeEdit
+    E: increaseChronoByOne
+    O: gui.increaseChronoByOne()
+
+TRANSITION:
+    S: Watch.TimeEdit
+    N: Watch.TimeEdit
     E: finishEdit
     O: print "Bottom right pressed"
        watch.finishTimeEdit()
@@ -171,6 +183,12 @@ TRANSITION:
     O: print "Editing alarm"
        gui.refreshAlarmDisplay()
        gui.startSelection()
+
+TRANSITION:
+    S: Watch.AlarmEdit
+    N: Watch.AlarmEdit
+    E: increaseChronoByOne
+    O: gui.increaseChronoByOne()
 
 TRANSITION:
     S: Watch.AlarmEdit
