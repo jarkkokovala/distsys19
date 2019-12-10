@@ -20,9 +20,11 @@ The original state chart for the digital watch is displayed above. The chart ref
 
 The following watch functionality is not reflected on the chart: 
 * Alarm activated sign: 
-    * Alarm activated sign is displayed on watch screen when an alarm is set and has been activated. Alarm can be activated by pushing briefly the bottom right button. Alarm will not fire if it hasn't been activated.
+    * Alarm activated sign is displayed on watch screen when an alarm is set and has been activated. 
+    * Alarm can be activated by pushing briefly the bottom right button. 
+    * Alarm will not fire if it hasn't been activated.
 * Move edit position on edit mode: 
-    * When in time or alarm edit mode the edit position (hour, minute, second) can be changed by pressing the top left button. 
+    * When in time or alarm edit mode edit position (hour, minute, second) can be changed by pressing the top left button. 
 
 
 ## Implementation
