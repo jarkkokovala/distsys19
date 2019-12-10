@@ -19,10 +19,10 @@ The topLeftPressed event is not displayed in the chart since the task descriptio
 The original state chart for the digital watch is displayed above. The chart reflects the task description for project 3 and is not one-to-one with the implementation. The chart does not reflect all implementation-time modifications on watch functionality.  This is due to time-constraints on the project and other student work. 
 
 The following watch functionality is not reflected on the chart: 
-* Alarm activated sign
-    Alarm activated sign is displayed on watch screen when an alarm is set and has been activated. Alarm can be activated by pushing briefly the bottom right button. Alarm will not fire if it hasn't been activated.
-* Move edit position on edit mode
-    When in time or alarm edit mode the edit position (hour, minute, second) can be changed by pressing the top left button. 
+* Alarm activated sign: 
+    * Alarm activated sign is displayed on watch screen when an alarm is set and has been activated. Alarm can be activated by pushing briefly the bottom right button. Alarm will not fire if it hasn't been activated.
+* Move edit position on edit mode: 
+    * When in time or alarm edit mode the edit position (hour, minute, second) can be changed by pressing the top left button. 
 
 
 ## Implementation
