@@ -11,7 +11,7 @@ INITIALIZER:
     eventhandler.start()
     watch.start()
     root.mainloop()
-    exit()
+    exit() # To prevent SVM from crashing
 
 STATECHART:
     Watch [DS] [CS]
