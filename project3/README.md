@@ -5,6 +5,10 @@ Eeva-Maria Laiho, Jarkko Kovala, Paavo Hemmo
 
 # Project 3
 
+## Demo
+
+https://www.youtube.com/watch?v=pqPAZXTx7QU
+
 ## State chart
 
 State chart for the digital watch is divided in three parts. 
